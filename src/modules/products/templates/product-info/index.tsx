@@ -1,5 +1,4 @@
 import { HttpTypes } from "@medusajs/types"
-import { Heading, Text } from "@medusajs/ui"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 
 type ProductInfoProps = {
@@ -8,31 +7,42 @@ type ProductInfoProps = {
 
 const ProductInfo = ({ product }: ProductInfoProps) => {
   return (
-    <div id="product-info">
-      <div className="flex flex-col gap-y-4 lg:max-w-[500px] mx-auto">
-        {product.collection && (
-          <LocalizedClientLink
-            href={`/collections/${product.collection.handle}`}
-            className="text-medium text-ui-fg-muted hover:text-ui-fg-subtle"
-          >
-            {product.collection.title}
-          </LocalizedClientLink>
-        )}
-        <Heading
-          level="h2"
-          className="text-3xl leading-10 text-ui-fg-base"
-          data-testid="product-title"
+    <div id="product-info" className="flex flex-col gap-y-4 lg:max-w-[500px] mx-auto">
+      {/* Coleccion */}
+      {product.collection && (
+        <LocalizedClientLink
+          href={`/collections/${product.collection.handle}`}
+          className="text-xs text-yellow-400/70 hover:text-yellow-400 uppercase tracking-widest font-bold transition-colors"
         >
-          {product.title}
-        </Heading>
+          📦 {product.collection.title}
+        </LocalizedClientLink>
+      )}
 
-        <Text
-          className="text-medium text-ui-fg-subtle whitespace-pre-line"
-          data-testid="product-description"
-        >
-          {product.description}
-        </Text>
+      {/* Titulo */}
+      <h2
+        className="text-3xl font-black text-white leading-tight"
+        data-testid="product-title"
+      >
+        {product.title}
+      </h2>
+
+      {/* Badge digital */}
+      <div className="flex gap-2 flex-wrap">
+        <span className="px-3 py-1 bg-yellow-400/10 border border-yellow-400/30 text-yellow-400 text-xs rounded-full font-bold">
+          🔑 Licencia Digital
+        </span>
+        <span className="px-3 py-1 bg-green-400/10 border border-green-400/30 text-green-400 text-xs rounded-full font-bold">
+          ⚡ Entrega Inmediata
+        </span>
       </div>
+
+      {/* Descripcion */}
+      <p
+        className="text-sm text-gray-400 leading-relaxed whitespace-pre-line"
+        data-testid="product-description"
+      >
+        {product.description}
+      </p>
     </div>
   )
 }

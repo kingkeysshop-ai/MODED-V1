@@ -1,10 +1,8 @@
 "use client"
-
-import React, { useEffect, useActionState } from "react"
+import React, { useActionState } from "react"
 import Input from "@modules/common/components/input"
 import AccountInfo from "../account-info"
 import { HttpTypes } from "@medusajs/types"
-import { toast } from "@medusajs/ui"
 
 type MyInformationProps = {
   customer: HttpTypes.StoreCustomer
@@ -13,25 +11,28 @@ type MyInformationProps = {
 const ProfilePassword: React.FC<MyInformationProps> = ({ customer }) => {
   const [successState, setSuccessState] = React.useState(false)
 
-  // TODO: Add support for password updates
-  const updatePassword = async () => {
-    toast.info("Password update is not implemented")
+  const updatePassword = async (
+    _currentState: Record<string, unknown>,
+    formData: FormData
+  ) => {
+    return { success: false, error: "La actualización de contraseña no está disponible aún." }
   }
 
-  const clearState = () => {
-    setSuccessState(false)
-  }
+  const [state, formAction] = useActionState(updatePassword, {
+    error: "",
+    success: false,
+  })
+
+  const clearState = () => setSuccessState(false)
 
   return (
-    <form
-      action={updatePassword}
-      onReset={() => clearState()}
-      className="w-full"
-    >
+    <form action={formAction} onReset={() => clearState()} className="w-full">
       <AccountInfo
-        label="Password"
+        label="Contraseña"
         currentInfo={
-          <span>The password is not shown for security reasons</span>
+          <span className="text-gray-500 italic text-xs">
+            🔒 La contraseña está oculta por seguridad
+          </span>
         }
         isSuccess={successState}
         isError={false}
@@ -39,29 +40,32 @@ const ProfilePassword: React.FC<MyInformationProps> = ({ customer }) => {
         clearState={clearState}
         data-testid="account-password-editor"
       >
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 small:grid-cols-2 gap-3">
           <Input
-            label="Old password"
+            label="Contraseña actual"
             name="old_password"
             required
             type="password"
             data-testid="old-password-input"
           />
           <Input
-            label="New password"
+            label="Nueva contraseña"
             type="password"
             name="new_password"
             required
             data-testid="new-password-input"
           />
           <Input
-            label="Confirm password"
+            label="Confirmar contraseña"
             type="password"
             name="confirm_password"
             required
             data-testid="confirm-password-input"
           />
         </div>
+        <p className="text-xs text-gray-500 italic mt-2">
+          ⚠️ La actualización de contraseña no está disponible actualmente.
+        </p>
       </AccountInfo>
     </form>
   )

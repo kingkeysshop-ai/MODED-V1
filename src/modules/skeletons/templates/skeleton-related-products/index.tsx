@@ -3,16 +3,13 @@ import SkeletonProductPreview from "@modules/skeletons/components/skeleton-produ
 
 const SkeletonRelatedProducts = () => {
   return (
-    <div className="product-page-constraint">
-      <div className="flex flex-col gap-8 items-center text-center mb-8">
-        <div className="w-20 h-6 animate-pulse bg-gray-100"></div>
-        <div className="flex flex-col gap-4 items-center text-center mb-16">
-          <div className="w-96 h-10 animate-pulse bg-gray-100"></div>
-          <div className="w-48 h-10 animate-pulse bg-gray-100"></div>
-        </div>
+    <div className="flex flex-col gap-6 animate-pulse">
+      <div className="flex flex-col gap-2">
+        <div className="w-20 h-4 bg-gray-800 rounded" />
+        <div className="w-48 h-8 bg-gray-800 rounded-lg" />
       </div>
-      <ul className="grid grid-cols-2 small:grid-cols-3 medium:grid-cols-4 gap-x-6 gap-y-8 flex-1">
-        {repeat(3).map((index) => (
+      <ul className="grid grid-cols-2 small:grid-cols-4 gap-4">
+        {repeat(4).map((index) => (
           <li key={index}>
             <SkeletonProductPreview />
           </li>

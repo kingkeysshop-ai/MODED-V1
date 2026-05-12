@@ -1,4 +1,4 @@
-import { Checkbox, Label } from "@medusajs/ui"
+import { Checkbox } from "@medusajs/ui"
 import React from "react"
 
 type CheckboxProps = {
@@ -17,7 +17,7 @@ const CheckboxWithLabel: React.FC<CheckboxProps> = ({
   'data-testid': dataTestId
 }) => {
   return (
-    <div className="flex items-center space-x-2 ">
+    <div className="flex items-center space-x-2">
       <Checkbox
         className="text-base-regular flex items-center gap-x-2"
         id="checkbox"
@@ -29,13 +29,12 @@ const CheckboxWithLabel: React.FC<CheckboxProps> = ({
         name={name}
         data-testid={dataTestId}
       />
-      <Label
+      <label
         htmlFor="checkbox"
-        className="!transform-none !txt-medium"
-        size="large"
+        className="text-yellow-400 text-sm font-semibold cursor-pointer select-none"
       >
         {label}
-      </Label>
+      </label>
     </div>
   )
 }

@@ -1,12 +1,13 @@
 "use client"
 
-import { isManual, isStripeLike } from "@lib/constants"
+import { isAurpay, isCryptomus, isManual, isStripeLike } from "@lib/constants"
 import { placeOrder } from "@lib/data/cart"
 import { HttpTypes } from "@medusajs/types"
-import { Button } from "@medusajs/ui"
 import { useElements, useStripe } from "@stripe/react-stripe-js"
 import React, { useState } from "react"
 import ErrorMessage from "../error-message"
+import CryptomusPaymentButton from "./cryptomus-button"
+import AurpayPaymentButton from "./aurpay-button"
 
 type PaymentButtonProps = {
   cart: HttpTypes.StoreCart
@@ -39,8 +40,28 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
       return (
         <ManualTestPaymentButton notReady={notReady} data-testid={dataTestId} />
       )
+    case isCryptomus(paymentSession?.provider_id):
+      return (
+        <CryptomusPaymentButton
+          cart={cart}
+          notReady={notReady}
+          data-testid={dataTestId}
+        />
+      )
+    case isAurpay(paymentSession?.provider_id):
+      return (
+        <AurpayPaymentButton
+          cart={cart}
+          notReady={notReady}
+          data-testid={dataTestId}
+        />
+      )
     default:
-      return <Button disabled>Select a payment method</Button>
+      return (
+        <button disabled className="w-full py-4 bg-gray-700 text-gray-500 font-black text-base rounded-xl cursor-not-allowed">
+          Selecciona un metodo de pago
+        </button>
+      )
   }
 }
 
@@ -58,12 +79,8 @@ const StripePaymentButton = ({
 
   const onPaymentCompleted = async () => {
     await placeOrder()
-      .catch((err) => {
-        setErrorMessage(err.message)
-      })
-      .finally(() => {
-        setSubmitting(false)
-      })
+      .catch((err) => setErrorMessage(err.message))
+      .finally(() => setSubmitting(false))
   }
 
   const stripe = useStripe()
@@ -74,25 +91,20 @@ const StripePaymentButton = ({
     (s) => s.status === "pending"
   )
 
-  const disabled = !stripe || !elements ? true : false
+  const disabled = !stripe || !elements
 
   const handlePayment = async () => {
     setSubmitting(true)
-
     if (!stripe || !elements || !card || !cart) {
       setSubmitting(false)
       return
     }
-
     await stripe
       .confirmCardPayment(session?.data.client_secret as string, {
         payment_method: {
-          card: card,
+          card,
           billing_details: {
-            name:
-              cart.billing_address?.first_name +
-              " " +
-              cart.billing_address?.last_name,
+            name: cart.billing_address?.first_name + " " + cart.billing_address?.last_name,
             address: {
               city: cart.billing_address?.city ?? undefined,
               country: cart.billing_address?.country_code ?? undefined,
@@ -109,83 +121,77 @@ const StripePaymentButton = ({
       .then(({ error, paymentIntent }) => {
         if (error) {
           const pi = error.payment_intent
-
-          if (
-            (pi && pi.status === "requires_capture") ||
-            (pi && pi.status === "succeeded")
-          ) {
+          if ((pi && pi.status === "requires_capture") || (pi && pi.status === "succeeded")) {
             onPaymentCompleted()
           }
-
           setErrorMessage(error.message || null)
           return
         }
-
         if (
           (paymentIntent && paymentIntent.status === "requires_capture") ||
           paymentIntent.status === "succeeded"
         ) {
           return onPaymentCompleted()
         }
-
-        return
       })
   }
 
   return (
     <>
-      <Button
+      <button
         disabled={disabled || notReady}
         onClick={handlePayment}
-        size="large"
-        isLoading={submitting}
         data-testid={dataTestId}
+        className="w-full py-4 bg-yellow-400 text-gray-900 font-black text-base rounded-xl hover:bg-yellow-300 hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 flex items-center justify-center gap-2"
       >
-        Place order
-      </Button>
-      <ErrorMessage
-        error={errorMessage}
-        data-testid="stripe-payment-error-message"
-      />
+        {submitting ? (
+          <span className="inline-block w-5 h-5 border-2 border-gray-900 border-t-transparent rounded-full animate-spin" />
+        ) : (
+          "Realizar Pedido"
+        )}
+      </button>
+      <ErrorMessage error={errorMessage} data-testid="stripe-payment-error-message" />
     </>
   )
 }
 
-const ManualTestPaymentButton = ({ notReady }: { notReady: boolean }) => {
+const ManualTestPaymentButton = ({
+  notReady,
+  "data-testid": dataTestId,
+}: {
+  notReady: boolean
+  "data-testid"?: string
+}) => {
   const [submitting, setSubmitting] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
   const onPaymentCompleted = async () => {
     await placeOrder()
-      .catch((err) => {
-        setErrorMessage(err.message)
-      })
-      .finally(() => {
-        setSubmitting(false)
-      })
+      .catch((err) => setErrorMessage(err.message))
+      .finally(() => setSubmitting(false))
   }
 
-  const handlePayment = () => {
+  const handlePayment = async () => {
+    if (submitting) return
     setSubmitting(true)
-
-    onPaymentCompleted()
+    await onPaymentCompleted()
   }
 
   return (
     <>
-      <Button
-        disabled={notReady}
-        isLoading={submitting}
+      <button
+        disabled={notReady || submitting}
         onClick={handlePayment}
-        size="large"
-        data-testid="submit-order-button"
+        data-testid={dataTestId ?? "submit-order-button"}
+        className="w-full py-4 bg-yellow-400 text-gray-900 font-black text-base rounded-xl hover:bg-yellow-300 hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 flex items-center justify-center gap-2"
       >
-        Place order
-      </Button>
-      <ErrorMessage
-        error={errorMessage}
-        data-testid="manual-payment-error-message"
-      />
+        {submitting ? (
+          <span className="inline-block w-5 h-5 border-2 border-gray-900 border-t-transparent rounded-full animate-spin" />
+        ) : (
+          "Realizar Pedido"
+        )}
+      </button>
+      <ErrorMessage error={errorMessage} data-testid="manual-payment-error-message" />
     </>
   )
 }

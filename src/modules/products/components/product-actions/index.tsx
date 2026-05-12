@@ -8,6 +8,7 @@ import Divider from "@modules/common/components/divider"
 import OptionSelect from "@modules/products/components/product-actions/option-select"
 import { isEqual } from "lodash"
 import { useParams, usePathname, useSearchParams } from "next/navigation"
+import { useToast } from "@lib/context/toast-context"
 import { useEffect, useMemo, useRef, useState } from "react"
 import ProductPrice from "../product-price"
 import MobileActions from "./mobile-actions"
@@ -34,6 +35,7 @@ export default function ProductActions({
 }: ProductActionsProps) {
   const router = useRouter()
   const pathname = usePathname()
+  const { showToast } = useToast()
   const searchParams = useSearchParams()
 
   const [options, setOptions] = useState<Record<string, string | undefined>>({})
@@ -126,13 +128,22 @@ export default function ProductActions({
 
     setIsAdding(true)
 
-    await addToCart({
-      variantId: selectedVariant.id,
-      quantity: 1,
-      countryCode,
-    })
-
-    setIsAdding(false)
+    try {
+      await addToCart({
+        variantId: selectedVariant.id,
+        quantity: 1,
+        countryCode,
+      })
+      showToast(
+        "¡Producto añadido!",
+        product.title ?? undefined,
+        "success"
+      )
+    } catch {
+      showToast("Error al añadir al carrito", "Intenta de nuevo", "error")
+    } finally {
+      setIsAdding(false)
+    }
   }
 
   return (

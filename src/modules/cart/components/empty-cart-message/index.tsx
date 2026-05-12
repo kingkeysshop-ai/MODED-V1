@@ -1,23 +1,26 @@
-import { Heading, Text } from "@medusajs/ui"
-
-import InteractiveLink from "@modules/common/components/interactive-link"
+import LocalizedClientLink from "@modules/common/components/localized-client-link"
 
 const EmptyCartMessage = () => {
   return (
-    <div className="py-48 px-2 flex flex-col justify-center items-start" data-testid="empty-cart-message">
-      <Heading
-        level="h1"
-        className="flex flex-row text-3xl-regular gap-x-2 items-baseline"
-      >
-        Cart
-      </Heading>
-      <Text className="text-base-regular mt-4 mb-6 max-w-[32rem]">
-        You don&apos;t have anything in your cart. Let&apos;s change that, use
-        the link below to start browsing our products.
-      </Text>
-      <div>
-        <InteractiveLink href="/store">Explore products</InteractiveLink>
+    <div
+      className="flex flex-col items-center justify-center py-32 gap-6 text-center"
+      data-testid="empty-cart-message"
+    >
+      <span className="text-7xl">🛒</span>
+      <div className="flex flex-col gap-2">
+        <h1 className="text-3xl font-black text-white">
+          Tu carrito está <span className="text-yellow-400">vacío</span>
+        </h1>
+        <p className="text-gray-400 text-sm max-w-sm">
+          Aún no tienes productos en tu carrito. ¡Explora nuestras licencias digitales!
+        </p>
       </div>
+      <LocalizedClientLink
+        href="/store"
+        className="px-8 py-3 bg-yellow-400 text-gray-900 font-bold rounded-lg hover:bg-yellow-300 hover:-translate-y-0.5 transition-all duration-200"
+      >
+        🔑 Ver Productos
+      </LocalizedClientLink>
     </div>
   )
 }

@@ -1,7 +1,4 @@
-import { Container, Heading, Text } from "@medusajs/ui"
-
 import { isStripeLike, paymentInfoMap } from "@lib/constants"
-import Divider from "@modules/common/components/divider"
 import { convertToLocale } from "@lib/util/money"
 import { HttpTypes } from "@medusajs/types"
 
@@ -13,49 +10,27 @@ const PaymentDetails = ({ order }: PaymentDetailsProps) => {
   const payment = order.payment_collections?.[0].payments?.[0]
 
   return (
-    <div>
-      <Heading level="h2" className="flex flex-row text-3xl-regular my-6">
-        Payment
-      </Heading>
-      <div>
-        {payment && (
-          <div className="flex items-start gap-x-1 w-full">
-            <div className="flex flex-col w-1/3">
-              <Text className="txt-medium-plus text-ui-fg-base mb-1">
-                Payment method
-              </Text>
-              <Text
-                className="txt-medium text-ui-fg-subtle"
-                data-testid="payment-method"
-              >
-                {paymentInfoMap[payment.provider_id].title}
-              </Text>
-            </div>
-            <div className="flex flex-col w-2/3">
-              <Text className="txt-medium-plus text-ui-fg-base mb-1">
-                Payment details
-              </Text>
-              <div className="flex gap-2 txt-medium text-ui-fg-subtle items-center">
-                <Container className="flex items-center h-7 w-fit p-2 bg-ui-button-neutral-hover">
-                  {paymentInfoMap[payment.provider_id].icon}
-                </Container>
-                <Text data-testid="payment-amount">
-                  {isStripeLike(payment.provider_id) && payment.data?.card_last4
-                    ? `**** **** **** ${payment.data.card_last4}`
-                    : `${convertToLocale({
-                        amount: payment.amount,
-                        currency_code: order.currency_code,
-                      })} paid at ${new Date(
-                        payment.created_at ?? ""
-                      ).toLocaleString()}`}
-                </Text>
-              </div>
+    <div className="flex flex-wrap gap-6" data-testid="payment-details">
+      {payment && (
+        <>
+          <div className="flex flex-col gap-1 min-w-[140px]">
+            <p className="text-yellow-400 text-xs font-bold uppercase tracking-wider mb-1">Método de Pago</p>
+            <p className="text-white text-sm" data-testid="payment-method">
+              {paymentInfoMap[payment.provider_id]?.title ?? payment.provider_id}
+            </p>
+          </div>
+          <div className="flex flex-col gap-1 min-w-[180px]">
+            <p className="text-yellow-400 text-xs font-bold uppercase tracking-wider mb-1">Detalles</p>
+            <div className="flex items-center gap-2">
+              <span className="text-gray-300 text-sm" data-testid="payment-amount">
+                {isStripeLike(payment.provider_id) && payment.data?.card_last4
+                  ? `**** **** **** ${payment.data.card_last4}`
+                  : `${convertToLocale({ amount: payment.amount, currency_code: order.currency_code })} pagado el ${new Date(payment.created_at ?? "").toLocaleDateString("es-ES")}`}
+              </span>
             </div>
           </div>
-        )}
-      </div>
-
-      <Divider className="mt-8" />
+        </>
+      )}
     </div>
   )
 }

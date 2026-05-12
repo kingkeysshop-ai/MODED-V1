@@ -1,6 +1,5 @@
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import ChevronDown from "@modules/common/icons/chevron-down"
-import MedusaCTA from "@modules/layout/components/medusa-cta"
 
 export default function CheckoutLayout({
   children,
@@ -8,36 +7,55 @@ export default function CheckoutLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="w-full bg-white relative small:min-h-screen">
-      <div className="h-16 bg-white border-b ">
+    <div className="w-full bg-gray-950 relative min-h-screen">
+
+      {/* Navbar del checkout */}
+      <div className="h-16 bg-gray-900 border-b border-yellow-400/20">
         <nav className="flex h-full items-center content-container justify-between">
+
+          {/* Volver al carrito */}
           <LocalizedClientLink
             href="/cart"
-            className="text-small-semi text-ui-fg-base flex items-center gap-x-2 uppercase flex-1 basis-0"
+            className="flex items-center gap-x-2 text-gray-400 hover:text-yellow-400 transition-colors duration-200 flex-1 basis-0 text-sm"
             data-testid="back-to-cart-link"
           >
             <ChevronDown className="rotate-90" size={16} />
-            <span className="mt-px hidden small:block txt-compact-plus text-ui-fg-subtle hover:text-ui-fg-base ">
-              Back to shopping cart
-            </span>
-            <span className="mt-px block small:hidden txt-compact-plus text-ui-fg-subtle hover:text-ui-fg-base">
-              Back
-            </span>
+            <span className="hidden small:block">Volver al carrito</span>
+            <span className="block small:hidden">Volver</span>
           </LocalizedClientLink>
+
+          {/* Logo */}
           <LocalizedClientLink
             href="/"
-            className="txt-compact-xlarge-plus text-ui-fg-subtle hover:text-ui-fg-base uppercase"
+            className="text-xl font-black tracking-widest uppercase"
             data-testid="store-link"
           >
-            Medusa Store
+            <span className="text-white">KING</span>
+            <span className="text-yellow-400"> KEYS</span>
           </LocalizedClientLink>
-          <div className="flex-1 basis-0" />
+
+          {/* Seguridad */}
+          <div className="flex-1 basis-0 flex justify-end">
+            <span className="text-xs text-gray-500 flex items-center gap-1">
+              🔒 Pago Seguro
+            </span>
+          </div>
+
         </nav>
       </div>
-      <div className="relative" data-testid="checkout-container">{children}</div>
-      <div className="py-4 w-full flex items-center justify-center">
-        <MedusaCTA />
+
+      {/* Contenido */}
+      <div className="relative" data-testid="checkout-container">
+        {children}
       </div>
+
+      {/* Footer minimo */}
+      <div className="py-6 w-full flex items-center justify-center border-t border-gray-800">
+        <span className="text-xs text-gray-600">
+          © {new Date().getFullYear()} <span className="text-yellow-400 font-bold">King Keys</span> · Todos los derechos reservados
+        </span>
+      </div>
+
     </div>
   )
 }

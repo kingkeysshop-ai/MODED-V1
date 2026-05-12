@@ -1,10 +1,10 @@
 const SkeletonCodeForm = () => {
   return (
-    <div className="w-full flex flex-col">
-      <div className="bg-gray-100 h-7 w-24 mb-4"></div>
-      <div className="grid grid-cols-[1fr_80px] gap-x-2">
-        <div className="bg-gray-100 h-12"></div>
-        <div className="bg-gray-100 h-12"></div>
+    <div className="flex flex-col gap-y-3 animate-pulse">
+      <div className="w-24 h-4 bg-gray-800 rounded" />
+      <div className="flex gap-2">
+        <div className="flex-1 h-10 bg-gray-800 rounded-lg" />
+        <div className="w-20 h-10 bg-gray-700 rounded-lg" />
       </div>
     </div>
   )

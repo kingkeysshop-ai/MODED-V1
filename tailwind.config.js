@@ -4,13 +4,17 @@ module.exports = {
   darkMode: "class",
   presets: [require("@medusajs/ui-preset")],
   content: [
-    "./src/app/**/*.{js,ts,jsx,tsx}",
-    "./src/pages/**/*.{js,ts,jsx,tsx}",
-    "./src/components/**/*.{js,ts,jsx,tsx}",
-    "./src/modules/**/*.{js,ts,jsx,tsx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/modules/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./node_modules/@medusajs/ui/dist/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
+    important: true, // ✅ CRÍTICO: Fuerza especificidad en producción
     extend: {
       transitionProperty: {
         width: "width margin",
@@ -76,57 +80,25 @@ module.exports = {
           "100%": { transform: "rotate(360deg)" },
         },
         "fade-in-right": {
-          "0%": {
-            opacity: "0",
-            transform: "translateX(10px)",
-          },
-          "100%": {
-            opacity: "1",
-            transform: "translateX(0)",
-          },
+          "0%": { opacity: "0", transform: "translateX(10px)" },
+          "100%": { opacity: "1", transform: "translateX(0)" },
         },
         "fade-in-top": {
-          "0%": {
-            opacity: "0",
-            transform: "translateY(-10px)",
-          },
-          "100%": {
-            opacity: "1",
-            transform: "translateY(0)",
-          },
+          "0%": { opacity: "0", transform: "translateY(-10px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
         },
         "fade-out-top": {
-          "0%": {
-            height: "100%",
-          },
-          "99%": {
-            height: "0",
-          },
-          "100%": {
-            visibility: "hidden",
-          },
+          "0%": { height: "100%" },
+          "99%": { height: "0" },
+          "100%": { visibility: "hidden" },
         },
         "accordion-slide-up": {
-          "0%": {
-            height: "var(--radix-accordion-content-height)",
-            opacity: "1",
-          },
-          "100%": {
-            height: "0",
-            opacity: "0",
-          },
+          "0%": { height: "var(--radix-accordion-content-height)", opacity: "1" },
+          "100%": { height: "0", opacity: "0" },
         },
         "accordion-slide-down": {
-          "0%": {
-            "min-height": "0",
-            "max-height": "0",
-            opacity: "0",
-          },
-          "100%": {
-            "min-height": "var(--radix-accordion-content-height)",
-            "max-height": "none",
-            opacity: "1",
-          },
+          "0%": { "min-height": "0", "max-height": "0", opacity: "0" },
+          "100%": { "min-height": "var(--radix-accordion-content-height)", "max-height": "none", opacity: "1" },
         },
         enter: {
           "0%": { transform: "scale(0.9)", opacity: 0 },
@@ -140,21 +112,41 @@ module.exports = {
           "0%": { transform: "translateY(-100%)" },
           "100%": { transform: "translateY(0)" },
         },
+        "fade-up": {
+          "0%": { opacity: "0", transform: "translateY(24px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        float: {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-10px)" },
+        },
+        "pulse-glow": {
+          "0%, 100%": { opacity: "0.07" },
+          "50%": { opacity: "0.14" },
+        },
+        "bounce-scroll": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(6px)" },
+        },
       },
       animation: {
         ring: "ring 2.2s cubic-bezier(0.5, 0, 0.5, 1) infinite",
-        "fade-in-right":
-          "fade-in-right 0.3s cubic-bezier(0.5, 0, 0.5, 1) forwards",
+        "fade-in-right": "fade-in-right 0.3s cubic-bezier(0.5, 0, 0.5, 1) forwards",
         "fade-in-top": "fade-in-top 0.2s cubic-bezier(0.5, 0, 0.5, 1) forwards",
-        "fade-out-top":
-          "fade-out-top 0.2s cubic-bezier(0.5, 0, 0.5, 1) forwards",
-        "accordion-open":
-          "accordion-slide-down 300ms cubic-bezier(0.87, 0, 0.13, 1) forwards",
-        "accordion-close":
-          "accordion-slide-up 300ms cubic-bezier(0.87, 0, 0.13, 1) forwards",
+        "fade-out-top": "fade-out-top 0.2s cubic-bezier(0.5, 0, 0.5, 1) forwards",
+        "accordion-open": "accordion-slide-down 300ms cubic-bezier(0.87, 0, 0.13, 1) forwards",
+        "accordion-close": "accordion-slide-up 300ms cubic-bezier(0.87, 0, 0.13, 1) forwards",
         enter: "enter 200ms ease-out",
         "slide-in": "slide-in 1.2s cubic-bezier(.41,.73,.51,1.02)",
         leave: "leave 150ms ease-in forwards",
+        "fade-up": "fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both",
+        "fade-up-d1": "fade-up 0.6s 0.15s cubic-bezier(0.22, 1, 0.36, 1) both",
+        "fade-up-d2": "fade-up 0.6s 0.30s cubic-bezier(0.22, 1, 0.36, 1) both",
+        "fade-up-d3": "fade-up 0.6s 0.45s cubic-bezier(0.22, 1, 0.36, 1) both",
+        "fade-up-d4": "fade-up 0.6s 0.60s cubic-bezier(0.22, 1, 0.36, 1) both",
+        float: "float 3.5s ease-in-out infinite",
+        "pulse-glow": "pulse-glow 4s ease-in-out infinite",
+        "bounce-scroll": "bounce-scroll 1.4s ease-in-out infinite",
       },
     },
   },
