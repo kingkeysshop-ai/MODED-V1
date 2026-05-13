@@ -6,6 +6,11 @@ let MEDUSA_BACKEND_URL = "http://localhost:9000"
 
 if (process.env.MEDUSA_BACKEND_URL) {
   MEDUSA_BACKEND_URL = process.env.MEDUSA_BACKEND_URL
+  
+  // Ensure URL has a protocol
+  if (!MEDUSA_BACKEND_URL.startsWith("http://") && !MEDUSA_BACKEND_URL.startsWith("https://")) {
+    MEDUSA_BACKEND_URL = `https://${MEDUSA_BACKEND_URL}`
+  }
 }
 
 export const sdk = new Medusa({

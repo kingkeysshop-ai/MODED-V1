@@ -21,7 +21,7 @@
     "@emotion/styled": "^11.14.1",
     "@headlessui/react": "^2.2.0",
     "@medusajs/icons": "latest",
-    "@medusajs/medusa": "^1.17.2",
+    "@medusajs/medusa": "^1.20.11",
     "@medusajs/medusa-js": "6.1.10",
     "@medusajs/ui": "latest",
     "@radix-ui/react-accordion": "^1.2.1",

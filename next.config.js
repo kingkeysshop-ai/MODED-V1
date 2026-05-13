@@ -11,6 +11,13 @@ const isDev = process.env.NODE_ENV === "development"
  */
 const nextConfig = {
   reactStrictMode: true,
+  transpilePackages: [
+    '@medusajs/ui',
+    '@radix-ui/react-popover',
+    'react-remove-scroll',
+    'react-remove-scroll-bar',
+    'react-style-singleton',
+  ],
   webpack: (config) => {
     config.resolve.alias = {
       ...(config.resolve.alias || {}),

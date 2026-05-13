@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server"
 
 const BACKEND_URL = process.env.MEDUSA_BACKEND_URL
 const PUBLISHABLE_API_KEY = process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY
-const DEFAULT_REGION = process.env.DEFAULT_REGION || process.env.NEXT_PUBLIC_DEFAULT_REGION || "co"
+const DEFAULT_REGION = (process.env.DEFAULT_REGION || process.env.NEXT_PUBLIC_DEFAULT_REGION || "co").toLowerCase()
 
 const regionMapCache = {
   regionMap: new Map<string, HttpTypes.StoreRegion>(),
@@ -43,7 +43,9 @@ async function getRegionMap(cacheId: string) {
 
     regions.forEach((region: HttpTypes.StoreRegion) => {
       region.countries?.forEach((c) => {
-        regionMapCache.regionMap.set(c.iso_2 ?? "", region)
+        if (c?.iso_2) {
+          regionMapCache.regionMap.set(c.iso_2.toLowerCase(), region)
+        }
       })
     })
 
@@ -60,10 +62,11 @@ function getCountryCode(
   // Obtener el primer segmento de la ruta
   const pathname = request.nextUrl.pathname
   const segments = pathname.split("/").filter(Boolean) // Elimina strings vacíos
+  const firstSegment = segments[0]?.toLowerCase()
 
   // Si el primer segmento existe y está en el regionMap, es un país válido
-  if (segments && regionMap.has(segments)) {
-    return segments
+  if (firstSegment && regionMap.has(firstSegment)) {
+    return firstSegment
   }
 
   // Si no, intentar con Vercel header
@@ -109,9 +112,39 @@ export async function middleware(request: NextRequest) {
     const pathname = request.nextUrl.pathname
     const segments = pathname.split("/").filter(Boolean)
 
+    // Normaliza country codes repetidos al inicio de la ruta: /co/co/... -> /co/...
+    if (segments[0]?.toLowerCase() === countryCode) {
+      let skip = 1
+      while (skip < segments.length && segments[skip]?.toLowerCase() === countryCode) {
+        skip += 1
+      }
+
+      if (skip > 1) {
+        const normalizedSegments = [countryCode, ...segments.slice(skip)]
+        const normalizedPath = `/${normalizedSegments.join("/")}${pathname.endsWith("/") ? "/" : ""}`
+        const response = NextResponse.redirect(new URL(normalizedPath, request.url), 307)
+
+        if (!cacheIdCookie) {
+          response.cookies.set("_medusa_cache_id", cacheId, {
+            maxAge: 60 * 60 * 24,
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
+            path: "/",
+          })
+        }
+
+        return response
+      }
+    }
+
     // ✅ CRÍTICO: Si el primer segmento YA es el country code, NO redirigir
+<<<<<<< HEAD
     if (segments[0] === countryCode) {
       // Ya estamos en la ruta correcta
+=======
+    if (segments[0]?.toLowerCase() === countryCode) {
+>>>>>>> 630a7fd (Fix middleware country code redirect)
       if (!cacheIdCookie) {
         const response = NextResponse.next()
         response.cookies.set("_medusa_cache_id", cacheId, {
