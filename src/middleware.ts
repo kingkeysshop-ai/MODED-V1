@@ -110,7 +110,7 @@ export async function middleware(request: NextRequest) {
     const segments = pathname.split("/").filter(Boolean)
 
     // ✅ CRÍTICO: Si el primer segmento YA es el country code, NO redirigir
-    if (segments === countryCode) {
+    if (segments[0] === countryCode) {
       // Ya estamos en la ruta correcta
       if (!cacheIdCookie) {
         const response = NextResponse.next()
