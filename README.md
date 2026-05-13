@@ -126,3 +126,4 @@ You'll also need to setup the integrations in your Medusa server. See the [Medus
 - [GitHub](https://github.com/vercel/next.js)
 - [Documentation](https://nextjs.org/docs)
 # fronter-v1-N
+# MODED-V1
