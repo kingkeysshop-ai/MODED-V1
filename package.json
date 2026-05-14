@@ -16,60 +16,51 @@
     "analyze": "ANALYZE=true next build"
   },
   "dependencies": {
-    "@chakra-ui/react": "^3.34.0",
-    "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.1",
     "@headlessui/react": "^2.2.0",
-    "@medusajs/icons": "latest",
-    "@medusajs/medusa-js": "^1",
-    "@medusajs/ui": "latest",
+    "@internationalized/date": "^3.5.4",
+    "@medusajs/icons": "~1.2.2",
+    "@medusajs/medusa-js": "~1.3.10",
+    "@medusajs/ui": "~3.0.1",
     "@radix-ui/react-accordion": "^1.2.1",
-    "@stripe/react-stripe-js": "^5.3.0",
-    "@stripe/stripe-js": "^8.2.0",
+    "@stripe/react-stripe-js": "^3.1.0",
+    "@stripe/stripe-js": "^4.9.0",
     "ansi-colors": "^4.1.3",
-    "framer-motion": "^12.38.0",
+    "framer-motion": "^11.3.0",
     "lodash": "^4.17.21",
-    "next": "^15.5.15",
+    "next": "15.3.2",
     "pg": "^8.11.3",
     "qs": "^6.12.1",
-    "react": "19.0.5",
+    "react": "19.0.0",
     "react-country-flag": "^3.1.0",
-    "react-dom": "19.0.5",
+    "react-dom": "19.0.0",
     "server-only": "^0.0.1",
-    "tailwindcss-radix": "^2.8.0",
-    "webpack": "^5"
+    "tailwindcss-radix": "^2.8.0"
   },
   "devDependencies": {
     "@babel/core": "^7.17.5",
     "@medusajs/types": "1.11.16",
-    "@medusajs/ui-preset": "latest",
+    "@medusajs/ui-preset": "~1.1.2",
     "@types/lodash": "^4.14.195",
-    "@types/node": "^24.0.0",
+    "@types/node": "^20.14.0",
     "@types/pg": "^8.11.0",
-    "@types/react": "19.0.5",
-    "@types/react-dom": "19.0.5",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
     "@types/react-instantsearch-dom": "^6.12.3",
     "autoprefixer": "^10.4.2",
     "babel-loader": "^8.2.3",
-    "eslint": "8.10.0",
-    "eslint-config-next": "15.0.8",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "15.3.2",
     "postcss": "^8.4.8",
-    "prettier": "^2.8.8",
-    "tailwindcss": "^3.0.23",
-    "typescript": "^5.3.2"
-  },
-  "resolutions": {
-    "@types/react": "19.0.5",
-    "@types/react-dom": "19.0.5"
+    "prettier": "^3.3.0",
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5.5.0"
   },
   "overrides": {
-    "react": "19.0.5",
-    "react-dom": "19.0.5",
-    "@react-aria/focus": "3.20.2",
-    "@react-aria/interactions": "3.25.0"
+    "react": "19.0.0",
+    "react-dom": "19.0.0"
   },
   "engines": {
-    "node": "24.x"
+    "node": ">=20.0.0"
   },
-  "packageManager": "npm@11.12.0"
+  "packageManager": "npm@10.8.0"
 }
