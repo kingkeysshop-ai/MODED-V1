@@ -139,12 +139,7 @@ export async function middleware(request: NextRequest) {
     }
 
     // ✅ CRÍTICO: Si el primer segmento YA es el country code, NO redirigir
-<<<<<<< HEAD
-    if (segments[0] === countryCode) {
-      // Ya estamos en la ruta correcta
-=======
     if (segments[0]?.toLowerCase() === countryCode) {
->>>>>>> 630a7fd (Fix middleware country code redirect)
       if (!cacheIdCookie) {
         const response = NextResponse.next()
         response.cookies.set("_medusa_cache_id", cacheId, {
