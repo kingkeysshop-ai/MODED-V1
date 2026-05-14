@@ -53,6 +53,12 @@ export const listProducts = async ({
     ...(await getCacheOptions("products")),
   }
 
+  const queryOptions = {
+    ...queryParams,
+  }
+
+  delete queryOptions.fields
+
   return sdk.client
     .fetch<{ products: HttpTypes.StoreProduct[]; count: number }>(
       `/store/products`,
@@ -62,9 +68,7 @@ export const listProducts = async ({
           limit,
           offset,
           region_id: region?.id,
-          fields:
-            "*variants.calculated_price,+variants.inventory_quantity,*variants.images,+metadata,+tags,",
-          ...queryParams,
+          ...queryOptions,
         },
         headers,
         next,

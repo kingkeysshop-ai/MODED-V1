@@ -25,9 +25,6 @@ export const retrieveVariant = async (
       `/store/product-variants/${variant_id}`,
       {
         method: "GET",
-        query: {
-          fields: "*images",
-        },
         headers,
         next,
         cache: "force-cache",

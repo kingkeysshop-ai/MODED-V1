@@ -27,14 +27,16 @@ export const listCollections = async (
     ...(await getCacheOptions("collections")),
   }
 
-  queryParams.limit = queryParams.limit || "100"
-  queryParams.offset = queryParams.offset || "0"
+  const sanitizedQueryParams = { ...queryParams }
+  delete sanitizedQueryParams.fields
+  sanitizedQueryParams.limit = sanitizedQueryParams.limit || "100"
+  sanitizedQueryParams.offset = sanitizedQueryParams.offset || "0"
 
   return sdk.client
     .fetch<{ collections: HttpTypes.StoreCollection[]; count: number }>(
       "/store/collections",
       {
-        query: queryParams,
+        query: sanitizedQueryParams,
         next,
         cache: "force-cache",
       }
@@ -51,7 +53,7 @@ export const getCollectionByHandle = async (
 
   return sdk.client
     .fetch<HttpTypes.StoreCollectionListResponse>(`/store/collections`, {
-      query: { handle, fields: "*products" },
+      query: { handle },
       next,
       cache: "force-cache",
     })

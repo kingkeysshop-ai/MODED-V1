@@ -45,7 +45,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     }))
 
-    const { collections } = await listCollections({ fields: "id,handle,title" })
+    const { collections } = await listCollections()
     const collectionRoutes: MetadataRoute.Sitemap = (collections ?? []).map((c) => ({
       url: `${BASE_URL}/${primaryCountry}/collections/${c.handle}`,
       lastModified: new Date(),

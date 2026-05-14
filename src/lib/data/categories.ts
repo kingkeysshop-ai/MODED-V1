@@ -8,17 +8,18 @@ export const listCategories = async (query?: Record<string, any>) => {
   }
 
   const limit = query?.limit || 100
+  const queryOptions = {
+    limit,
+    ...query,
+  }
+
+  delete queryOptions.fields
 
   return sdk.client
     .fetch<{ product_categories: HttpTypes.StoreProductCategory[] }>(
       "/store/product-categories",
       {
-        query: {
-          fields:
-            "*category_children, *products, *parent_category, *parent_category.parent_category",
-          limit,
-          ...query,
-        },
+        query: queryOptions,
         next,
         cache: "force-cache",
       }
@@ -38,7 +39,6 @@ export const getCategoryByHandle = async (categoryHandle: string[]) => {
       `/store/product-categories`,
       {
         query: {
-          fields: "*category_children, *products",
           handle,
         },
         next,

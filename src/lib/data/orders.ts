@@ -17,10 +17,6 @@ export const retrieveOrder = async (id: string) => {
   return sdk.client
     .fetch<HttpTypes.StoreOrderResponse>(`/store/orders/${id}`, {
       method: "GET",
-      query: {
-        fields:
-          "*payment_collections.payments,*items,*items.metadata,*items.variant,*items.product",
-      },
       headers,
       next,
       cache: "force-cache",
@@ -42,16 +38,19 @@ export const listOrders = async (
     ...(await getCacheOptions("orders")),
   }
 
+  const queryOptions = {
+    limit,
+    offset,
+    order: "-created_at",
+    ...filters,
+  }
+
+  delete queryOptions.fields
+
   return sdk.client
     .fetch<HttpTypes.StoreOrderListResponse>(`/store/orders`, {
       method: "GET",
-      query: {
-        limit,
-        offset,
-        order: "-created_at",
-        fields: "*items,+items.metadata,*items.variant,*items.product",
-        ...filters,
-      },
+      query: queryOptions,
       headers,
       next,
       cache: "force-cache",
@@ -84,9 +83,7 @@ export const createTransferRequest = async (
     .requestTransfer(
       id,
       {},
-      {
-        fields: "id, email",
-      },
+      {},
       headers
     )
     .then(({ order }) => ({ success: true, error: null, order }))

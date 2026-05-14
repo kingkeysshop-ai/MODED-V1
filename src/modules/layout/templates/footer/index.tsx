@@ -3,7 +3,7 @@ import { listCollections } from "@lib/data/collections"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 
 export default async function Footer() {
-  const { collections } = await listCollections({ fields: "*products" })
+  const { collections } = await listCollections()
   const productCategories = await listCategories()
 
   return (
