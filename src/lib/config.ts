@@ -34,8 +34,12 @@ client.fetch = async <T>(
 ): Promise<T> => {
   const { method = "GET", query, headers = {}, body } = init
 
-  const mergedHeaders = {
+  const mergedHeaders: Record<string, string> = {
     ...headers,
+  }
+
+  if (process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY) {
+    mergedHeaders["x-publishable-api-key"] = process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY
   }
 
   try {

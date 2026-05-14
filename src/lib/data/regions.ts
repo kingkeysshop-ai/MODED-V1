@@ -51,12 +51,14 @@ export const getRegion = async (countryCode: string) => {
 
     regions.forEach((region) => {
       region.countries?.forEach((c) => {
-        regionMap.set(c?.iso_2 ?? "", region)
+        if (c?.iso_2) {
+          regionMap.set(c.iso_2.toLowerCase(), region)
+        }
       })
     })
 
     const region = countryCode
-      ? regionMap.get(countryCode)
+      ? regionMap.get(countryCode.toLowerCase())
       : regionMap.get("us")
 
     return region
