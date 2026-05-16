@@ -14,7 +14,7 @@ const getProfileCompletion = (customer: HttpTypes.StoreCustomer | null) => {
   if (customer.email) count++
   if (customer.first_name && customer.last_name) count++
   if (customer.phone) count++
-  if (customer.addresses?.find((addr) => addr.is_default_billing)) count++
+  if (customer.addresses?.find((addr: any) => addr.is_default_billing)) count++
   return (count / 4) * 100
 }
 

@@ -52,7 +52,7 @@ export const getCollectionByHandle = async (
   }
 
   return sdk.client
-    .fetch<HttpTypes.StoreCollectionListResponse>(`/store/collections`, {
+    .fetch<any>(`/store/collections`, {
       query: { handle },
       next,
       cache: "force-cache",

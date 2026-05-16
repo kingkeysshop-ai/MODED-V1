@@ -13,7 +13,7 @@ import { isSimpleProduct } from "@lib/util/product"
 
 type MobileActionsProps = {
   product: HttpTypes.StoreProduct
-  variant?: HttpTypes.StoreProductVariant
+  variant?: any
   options: Record<string, string | undefined>
   updateOptions: (title: string, value: string) => void
   inStock?: boolean
@@ -174,7 +174,7 @@ const MobileActions: React.FC<MobileActionsProps> = ({
                   <div className="bg-white px-6 py-12">
                     {(product.variants?.length ?? 0) > 1 && (
                       <div className="flex flex-col gap-y-6">
-                        {(product.options || []).map((option) => {
+                        {(product.options || []).map((option: any) => {
                           return (
                             <div key={option.id}>
                               <OptionSelect

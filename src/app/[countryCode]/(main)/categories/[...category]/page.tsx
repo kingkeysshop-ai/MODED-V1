@@ -3,7 +3,7 @@ import { notFound } from "next/navigation"
 
 import { getCategoryByHandle, listCategories } from "@lib/data/categories"
 import { listRegions } from "@lib/data/regions"
-import { StoreRegion } from "@medusajs/types"
+import { HttpTypes } from "@medusajs/types"
 import CategoryTemplate from "@modules/categories/templates"
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
 
@@ -25,8 +25,8 @@ export async function generateStaticParams() {
       return []
     }
 
-    const countryCodes = await listRegions().then((regions: StoreRegion[]) =>
-      regions?.map((r) => r.countries?.map((c) => c.iso_2)).flat()
+    const countryCodes = await listRegions().then((regions: any[]) =>
+      regions?.map((r) => r.countries?.map((c: any) => c.iso_2).flat())
     )
 
     const categoryHandles = product_categories.map(

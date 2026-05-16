@@ -17,7 +17,7 @@ export default function Loading() {
       <div className="content-container py-16">
         <div className="w-48 h-8 bg-gray-800 rounded-xl mb-8 mx-auto" />
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          {[1, 2, 3, 4].map((i) => (
+          {[1, 2, 3, 4].map((i: any) => (
             <div key={i} className="h-32 bg-gray-900 border border-gray-800 rounded-xl" />
           ))}
         </div>
@@ -26,7 +26,7 @@ export default function Loading() {
       <div className="content-container pb-16">
         <div className="w-56 h-8 bg-gray-800 rounded-xl mb-8" />
         <div className="grid grid-cols-2 small:grid-cols-4 gap-4">
-          {[1, 2, 3, 4].map((i) => (
+          {[1, 2, 3, 4].map((i: any) => (
             <div key={i} className="aspect-[9/16] bg-gray-900 border border-gray-800 rounded-xl" />
           ))}
         </div>

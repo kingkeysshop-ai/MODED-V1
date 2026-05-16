@@ -32,7 +32,7 @@ const ShippingAddress = ({
   })
 
   const countriesInRegion = useMemo(
-    () => cart?.region?.countries?.map((c) => c.iso_2),
+    () => cart?.region?.countries?.map((c: any) => c.iso_2),
     [cart?.region]
   )
 
@@ -40,13 +40,13 @@ const ShippingAddress = ({
   const addressesInRegion = useMemo(
     () =>
       customer?.addresses.filter(
-        (a) => a.country_code && countriesInRegion?.includes(a.country_code)
+        (a: any) => a.country_code && countriesInRegion?.includes(a.country_code)
       ),
     [customer?.addresses, countriesInRegion]
   )
 
   const setFormAddress = (
-    address?: HttpTypes.StoreCartAddress,
+    address?: any,
     email?: string
   ) => {
     address &&
@@ -104,7 +104,7 @@ const ShippingAddress = ({
             addressInput={
               mapKeys(formData, (_, key) =>
                 key.replace("shipping_address.", "")
-              ) as HttpTypes.StoreCartAddress
+              ) as any
             }
             onSelect={setFormAddress}
           />

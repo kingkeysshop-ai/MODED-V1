@@ -33,7 +33,7 @@ const ANIMATION_DELAYS = [0, 60, 120, 180]
 // ─── Tipos ─────────────────────────────────────────────────────────────────────
 
 type SideMenuProps = {
-  regions: HttpTypes.StoreRegion[] | null
+  regions: any[] | null
   locales: Locale[] | null
   currentLocale: string | null
 }

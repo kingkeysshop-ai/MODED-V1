@@ -16,12 +16,12 @@ import { useRouter } from "next/navigation"
 
 type ProductActionsProps = {
   product: HttpTypes.StoreProduct
-  region: HttpTypes.StoreRegion
+  region: any
   disabled?: boolean
 }
 
 const optionsAsKeymap = (
-  variantOptions: HttpTypes.StoreProductVariant["options"]
+  variantOptions: any["options"]
 ) => {
   return variantOptions?.reduce((acc: Record<string, string>, varopt: any) => {
     acc[varopt.option_id] = varopt.value
@@ -55,7 +55,7 @@ export default function ProductActions({
       return
     }
 
-    return product.variants.find((v) => {
+    return product.variants.find((v: any) => {
       const variantOptions = optionsAsKeymap(v.options)
       return isEqual(variantOptions, options)
     })
@@ -71,7 +71,7 @@ export default function ProductActions({
 
   //check if the selected options produce a valid variant
   const isValidVariant = useMemo(() => {
-    return product.variants?.some((v) => {
+    return product.variants?.some((v: any) => {
       const variantOptions = optionsAsKeymap(v.options)
       return isEqual(variantOptions, options)
     })
@@ -152,7 +152,7 @@ export default function ProductActions({
         <div>
           {(product.variants?.length ?? 0) > 1 && (
             <div className="flex flex-col gap-y-4">
-              {(product.options || []).map((option) => {
+              {(product.options || []).map((option: any) => {
                 return (
                   <div key={option.id}>
                     <OptionSelect

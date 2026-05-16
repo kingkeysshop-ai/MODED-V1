@@ -18,7 +18,7 @@ const computeTarget = (
   price: HttpTypes.StorePrice
 ) => {
   const priceRule = (price.price_rules || []).find(
-    (pr) => pr.attribute === "item_total"
+    (pr: any) => pr.attribute === "item_total"
   )!
 
   const currentAmount = cart.item_total
@@ -87,33 +87,25 @@ export default function ShippingPriceNudge({
 
   // Check if any shipping options have a conditional price based on item_total
   const freeShippingPrice = shippingOptions
-    .map((shippingOption) => {
-      const calculatedPrice = shippingOption.calculated_price
-
-      if (!calculatedPrice) {
-        return
+    .flatMap((shippingOption) => {
+      if (!shippingOption.prices?.length) {
+        return []
       }
 
-      // Get all prices that are:
-      // 1. Currency code is same as the cart's
-      // 2. Have a rule that is set on item_total
-      const validCurrencyPrices = shippingOption.prices.filter(
-        (price) =>
-          price.currency_code === cart.currency_code &&
-          (price.price_rules || []).some(
-            (priceRule) => priceRule.attribute === "item_total"
-          )
-      )
-
-      return validCurrencyPrices.map((price) => {
-        return {
+      return shippingOption.prices
+        .filter(
+          (price) =>
+            price.currency_code === cart.currency_code &&
+            (price.price_rules || []).some(
+              (priceRule) => priceRule.attribute === "item_total"
+            )
+        )
+        .map((price: any) => ({
           ...price,
           shipping_option_id: shippingOption.id,
           ...computeTarget(cart, price),
-        }
-      })
+        }))
     })
-    .flat(1)
     .filter(Boolean)
     // We focus here entirely on free shipping, but this can be edited to handle multiple layers
     // of reduced shipping prices.

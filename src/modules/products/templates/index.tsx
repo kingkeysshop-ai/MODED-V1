@@ -13,9 +13,9 @@ import ProductActionsWrapper from "./product-actions-wrapper"
 
 type ProductTemplateProps = {
   product: HttpTypes.StoreProduct
-  region: HttpTypes.StoreRegion
+  region: any
   countryCode: string
-  images: HttpTypes.StoreProductImage[]
+  images: any[]
 }
 
 const ProductTemplate: React.FC<ProductTemplateProps> = ({
@@ -84,7 +84,7 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
               { icon: "⚡", text: "Activación Inmediata" },
               { icon: "🔒", text: "Pago Seguro" },
               { icon: "🎧", text: "Soporte 24/7" },
-            ].map((item) => (
+            ].map((item: any) => (
               <div key={item.text} className="flex items-center gap-3">
                 <span className="text-base">{item.icon}</span>
                 <span className="text-gray-400 text-xs">{item.text}</span>

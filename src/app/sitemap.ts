@@ -19,7 +19,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const regions = await listRegions()
     const primaryCountry =
       (regions
-        ?.flatMap((r) => r.countries?.map((c) => c.iso_2) ?? [])
+        ?.flatMap((r) => r.countries?.map((c: any) => c.iso_2) ?? [])
         .filter(Boolean)[0] as string) || "es"
 
     // listProducts devuelve { response: { products, count }, nextPage }
@@ -38,7 +38,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }))
 
     const categories = await listCategories()
-    const categoryRoutes: MetadataRoute.Sitemap = (categories ?? []).map((c) => ({
+    const categoryRoutes: MetadataRoute.Sitemap = (categories ?? []).map((c: any) => ({
       url: `${BASE_URL}/${primaryCountry}/categories/${c.handle}`,
       lastModified: new Date(),
       changeFrequency: "weekly" as const,
@@ -46,7 +46,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }))
 
     const { collections } = await listCollections()
-    const collectionRoutes: MetadataRoute.Sitemap = (collections ?? []).map((c) => ({
+    const collectionRoutes: MetadataRoute.Sitemap = (collections ?? []).map((c: any) => ({
       url: `${BASE_URL}/${primaryCountry}/collections/${c.handle}`,
       lastModified: new Date(),
       changeFrequency: "weekly" as const,

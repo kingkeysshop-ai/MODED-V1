@@ -15,6 +15,7 @@ import {
   setAuthToken,
 } from "./cookies"
 
+// ─── Recuperar cliente autenticado ───────────────────────────────────────────
 export const retrieveCustomer =
   async (): Promise<HttpTypes.StoreCustomer | null> => {
     const authHeaders = await getAuthHeaders()
@@ -36,18 +37,20 @@ export const retrieveCustomer =
         next,
         cache: "force-cache",
       })
-      .then(({ customer }) => customer)
+      .then(({ customer }: any) => customer)
       .catch(() => null)
   }
 
-export const updateCustomer = async (body: HttpTypes.StoreUpdateCustomer) => {
+// ─── Actualizar datos del cliente ─────────────────────────────────────────────
+export const updateCustomer = async (body: any) => {
   const headers = {
     ...(await getAuthHeaders()),
   }
 
-  const updateRes = await sdk.store.customer
-    .update(body, {}, headers)
-    .then(({ customer }) => customer)
+  // ✅ SDK v2 — .update() solo acepta (body, headers)
+  const updateRes = await sdk.customers
+    .update(body, headers)
+    .then(({ customer }: any) => customer)
     .catch(medusaError)
 
   const cacheTag = await getCacheTag("customers")
@@ -56,6 +59,7 @@ export const updateCustomer = async (body: HttpTypes.StoreUpdateCustomer) => {
   return updateRes
 }
 
+// ─── Registro de nuevo cliente ────────────────────────────────────────────────
 export async function signup(_currentState: unknown, formData: FormData) {
   const password = formData.get("password") as string
   const customerForm = {
@@ -66,12 +70,13 @@ export async function signup(_currentState: unknown, formData: FormData) {
   }
 
   try {
-    const token = await sdk.auth.register("customer", "emailpass", {
+    // ✅ FIX SDK v2: register(provider, actor_type, body)
+    const token = await sdk.auth.register("emailpass", "customer", {
       ...customerForm,
       password,
     })
 
-    await setAuthToken(token as string)
+    await setAuthToken(token as unknown as string)
 
     const headers = {
       authorization: `Bearer ${token}`,
@@ -90,15 +95,17 @@ export async function signup(_currentState: unknown, formData: FormData) {
   }
 }
 
+// ─── Login de cliente ─────────────────────────────────────────────────────────
 export async function login(_currentState: unknown, formData: FormData) {
   const email = formData.get("email") as string
   const password = formData.get("password") as string
 
   try {
+    // ✅ FIX SDK v2: login(provider, actor_type, body)
     await sdk.auth
-      .login("customer", "emailpass", { email, password })
-      .then(async (token) => {
-        await setAuthToken(token as string)
+      .login("emailpass", "customer", { email, password })
+      .then(async (token: any) => {
+        await setAuthToken(token as unknown as string)
         const customerCacheTag = await getCacheTag("customers")
         revalidateTag(customerCacheTag)
       })
@@ -113,8 +120,9 @@ export async function login(_currentState: unknown, formData: FormData) {
   }
 }
 
+// ─── Cerrar sesión ────────────────────────────────────────────────────────────
 export async function signout(countryCode: string) {
-  await sdk.auth.logout()
+  await sdk.auth.deleteSession()
 
   await removeAuthToken()
 
@@ -129,6 +137,7 @@ export async function signout(countryCode: string) {
   redirect(`/${countryCode}/account`)
 }
 
+// ─── Transferir carrito al cliente autenticado ────────────────────────────────
 export async function transferCart() {
   const cartId = await getCartId()
 
@@ -138,12 +147,18 @@ export async function transferCart() {
 
   const headers = await getAuthHeaders()
 
-  await sdk.store.cart.transferCart(cartId, {}, headers)
+  await sdk.client.fetch(`/store/carts/${cartId}/transfer`, {
+    method: "POST",
+    headers: {
+      ...headers,
+    },
+  })
 
   const cartCacheTag = await getCacheTag("carts")
   revalidateTag(cartCacheTag)
 }
 
+// ─── Agregar dirección al cliente ─────────────────────────────────────────────
 export const addCustomerAddress = async (
   currentState: Record<string, unknown>,
   formData: FormData
@@ -170,18 +185,23 @@ export const addCustomerAddress = async (
     ...(await getAuthHeaders()),
   }
 
-  return sdk.store.customer
-    .createAddress(address, {}, headers)
-    .then(async ({ customer }) => {
+  return sdk.client
+    .fetch(`/store/customers/me/addresses`, {
+      method: "POST",
+      headers,
+      body: address,
+    })
+    .then(async () => {
       const customerCacheTag = await getCacheTag("customers")
       revalidateTag(customerCacheTag)
       return { success: true, error: null }
     })
-    .catch((err) => {
+    .catch((err: any) => {
       return { success: false, error: err.toString() }
     })
 }
 
+// ─── Eliminar dirección del cliente ──────────────────────────────────────────
 export const deleteCustomerAddress = async (
   addressId: string
 ): Promise<void> => {
@@ -189,18 +209,22 @@ export const deleteCustomerAddress = async (
     ...(await getAuthHeaders()),
   }
 
-  await sdk.store.customer
-    .deleteAddress(addressId, headers)
+  await sdk.client
+    .fetch(`/store/customers/me/addresses/${addressId}`, {
+      method: "DELETE",
+      headers,
+    })
     .then(async () => {
       const customerCacheTag = await getCacheTag("customers")
       revalidateTag(customerCacheTag)
       return { success: true, error: null }
     })
-    .catch((err) => {
+    .catch((err: any) => {
       return { success: false, error: err.toString() }
     })
 }
 
+// ─── Actualizar dirección del cliente ────────────────────────────────────────
 export const updateCustomerAddress = async (
   currentState: Record<string, unknown>,
   formData: FormData
@@ -222,7 +246,7 @@ export const updateCustomerAddress = async (
     postal_code: formData.get("postal_code") as string,
     province: formData.get("province") as string,
     country_code: formData.get("country_code") as string,
-  } as HttpTypes.StoreUpdateCustomerAddress
+  } as any
 
   const phone = formData.get("phone") as string
 
@@ -234,14 +258,18 @@ export const updateCustomerAddress = async (
     ...(await getAuthHeaders()),
   }
 
-  return sdk.store.customer
-    .updateAddress(addressId, address, {}, headers)
+  return sdk.client
+    .fetch(`/store/customers/me/addresses/${addressId}`, {
+      method: "POST",
+      headers,
+      body: address,
+    })
     .then(async () => {
       const customerCacheTag = await getCacheTag("customers")
       revalidateTag(customerCacheTag)
       return { success: true, error: null }
     })
-    .catch((err) => {
+    .catch((err: any) => {
       return { success: false, error: err.toString() }
     })
 }

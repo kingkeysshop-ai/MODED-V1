@@ -7,7 +7,7 @@ import { HttpTypes } from "@medusajs/types"
 
 type SummaryProps = {
   cart: HttpTypes.StoreCart & {
-    promotions: HttpTypes.StorePromotion[]
+    promotions: any[]
   }
 }
 

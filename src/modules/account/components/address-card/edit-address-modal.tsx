@@ -13,8 +13,8 @@ import { HttpTypes } from "@medusajs/types"
 import { deleteCustomerAddress, updateCustomerAddress } from "@lib/data/customer"
 
 type EditAddressProps = {
-  region: HttpTypes.StoreRegion
-  address: HttpTypes.StoreCustomerAddress
+  region: any
+  address: any
   isActive?: boolean
 }
 

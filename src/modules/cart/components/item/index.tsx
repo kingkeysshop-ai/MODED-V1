@@ -14,7 +14,7 @@ import Thumbnail from "@modules/products/components/thumbnail"
 import { useState } from "react"
 
 type ItemProps = {
-  item: HttpTypes.StoreCartLineItem
+  item: any
   type?: "full" | "preview"
   currencyCode: string
 }
@@ -27,7 +27,7 @@ const Item = ({ item, type = "full", currencyCode }: ItemProps) => {
     setError(null)
     setUpdating(true)
     await updateLineItem({ lineId: item.id, quantity })
-      .catch((err) => setError(err.message))
+      .catch((err: any) => setError(err.message))
       .finally(() => setUpdating(false))
   }
 

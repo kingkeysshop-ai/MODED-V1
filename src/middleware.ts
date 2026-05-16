@@ -6,7 +6,7 @@ const PUBLISHABLE_API_KEY = process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY
 const DEFAULT_REGION = (process.env.DEFAULT_REGION || process.env.NEXT_PUBLIC_DEFAULT_REGION || "co").toLowerCase()
 
 const regionMapCache = {
-  regionMap: new Map<string, HttpTypes.StoreRegion>(),
+  regionMap: new Map<string, any>(),
   regionMapUpdated: Date.now(),
 }
 
@@ -41,8 +41,8 @@ async function getRegionMap(cacheId: string) {
       throw new Error("No regions found")
     }
 
-    regions.forEach((region: HttpTypes.StoreRegion) => {
-      region.countries?.forEach((c) => {
+    regions.forEach((region: any) => {
+      region.countries?.forEach((c: any) => {
         if (c?.iso_2) {
           regionMapCache.regionMap.set(c.iso_2.toLowerCase(), region)
         }
@@ -57,7 +57,7 @@ async function getRegionMap(cacheId: string) {
 
 function getCountryCode(
   request: NextRequest,
-  regionMap: Map<string, HttpTypes.StoreRegion | number>
+  regionMap: Map<string, any>
 ): string | undefined {
   // Obtener el primer segmento de la ruta
   const pathname = request.nextUrl.pathname

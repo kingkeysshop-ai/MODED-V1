@@ -8,10 +8,10 @@ import compareAddresses from "@lib/util/compare-addresses"
 import { HttpTypes } from "@medusajs/types"
 
 type AddressSelectProps = {
-  addresses: HttpTypes.StoreCustomerAddress[]
-  addressInput: HttpTypes.StoreCartAddress | null
+  addresses: any[]
+  addressInput: any | null
   onSelect: (
-    address: HttpTypes.StoreCartAddress | undefined,
+    address: any | undefined,
     email?: string
   ) => void
 }
@@ -24,7 +24,7 @@ const AddressSelect = ({
   const handleSelect = (id: string) => {
     const savedAddress = addresses.find((a) => a.id === id)
     if (savedAddress) {
-      onSelect(savedAddress as HttpTypes.StoreCartAddress)
+      onSelect(savedAddress as any)
     }
   }
 
@@ -64,7 +64,7 @@ const AddressSelect = ({
             className="absolute z-20 w-full overflow-auto text-small-regular bg-white border border-top-0 max-h-60 focus:outline-none sm:text-sm"
             data-testid="shipping-address-options"
           >
-            {addresses.map((address) => {
+            {addresses.map((address: any) => {
               return (
                 <Listbox.Option
                   key={address.id}

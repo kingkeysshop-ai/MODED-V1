@@ -10,7 +10,7 @@ type OrderCardProps = {
 
 const OrderCard = ({ order }: OrderCardProps) => {
   const numberOfLines = useMemo(() => {
-    return order.items?.reduce((acc, item) => acc + item.quantity, 0) ?? 0
+    return order.items?.reduce((acc: any, item: any) => acc + item.quantity, 0) ?? 0
   }, [order])
 
   const numberOfProducts = useMemo(() => {
@@ -48,7 +48,7 @@ const OrderCard = ({ order }: OrderCardProps) => {
       {/* Thumbnails de productos */}
       <div className="p-5">
         <div className="flex gap-3 mb-4">
-          {order.items?.slice(0, 3).map((i) => (
+          {order.items?.slice(0, 3).map((i: any) => (
             <div key={i.id} className="flex flex-col gap-1 w-16" data-testid="order-item">
               <div className="rounded-lg overflow-hidden border border-gray-700">
                 <Thumbnail thumbnail={i.thumbnail} images={[]} size="square" />

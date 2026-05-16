@@ -40,7 +40,7 @@ const AccountNav = ({ customer }: { customer: HttpTypes.StoreCustomer | null }) 
           </LocalizedClientLink>
         ) : (
           <ul className="flex flex-col">
-            {navItems.map((item) => {
+            {navItems.map((item: any) => {
               const active = route.split(countryCode)[1] === item.href
               return (
                 <li key={item.href}>
@@ -78,7 +78,7 @@ const AccountNav = ({ customer }: { customer: HttpTypes.StoreCustomer | null }) 
       {/* Desktop */}
       <div className="hidden small:block" data-testid="account-nav">
         <ul className="flex flex-col gap-1">
-          {navItems.map((item) => {
+          {navItems.map((item: any) => {
             const active = route.split(countryCode)[1] === item.href
             return (
               <li key={item.href}>

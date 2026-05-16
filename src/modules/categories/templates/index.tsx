@@ -80,7 +80,7 @@ export default function CategoryTemplate({
           {/* Subcategorias */}
           {category.category_children && category.category_children.length > 0 && (
             <div className="flex flex-wrap gap-2 mt-2">
-              {category.category_children.map((c) => (
+              {category.category_children.map((c: any) => (
                 <LocalizedClientLink
                   key={c.id}
                   href={`/categories/${c.handle}`}

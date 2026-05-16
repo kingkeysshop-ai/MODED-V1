@@ -15,7 +15,7 @@ type Props = {
 export async function generateStaticParams() {
   try {
     const countryCodes = await listRegions().then((regions) =>
-      regions?.map((r) => r.countries?.map((c) => c.iso_2)).flat()
+      regions?.map((r) => r.countries?.map((c: any) => c.iso_2)).flat()
     )
 
     if (!countryCodes) {
@@ -62,13 +62,13 @@ function getImagesForVariant(
     return product.images
   }
 
-  const variant = product.variants!.find((v) => v.id === selectedVariantId)
+  const variant = product.variants!.find((v: any) => v.id === selectedVariantId)
   if (!variant || !variant.images?.length) {
     return product.images
   }
 
-  const imageIdsMap = new Map(variant.images!.map((i) => [i.id, true]))
-  return product.images!.filter((i) => imageIdsMap.has(i.id))
+  const imageIdsMap = new Map(variant.images!.map((i: any) => [i.id, true]))
+  return product.images!.filter((i: any) => imageIdsMap.has(i.id))
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {

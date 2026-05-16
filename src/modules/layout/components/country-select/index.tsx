@@ -23,7 +23,7 @@ type CountryOption = {
 
 type CountrySelectProps = {
   toggleState: StateType
-  regions: HttpTypes.StoreRegion[]
+  regions: any[]
 }
 
 const CountrySelect = ({ toggleState, regions }: CountrySelectProps) => {
@@ -40,14 +40,14 @@ const CountrySelect = ({ toggleState, regions }: CountrySelectProps) => {
   const options = useMemo(() => {
     return regions
       ?.map((r) => {
-        return r.countries?.map((c) => ({
+        return r.countries?.map((c: any) => ({
           country: c.iso_2,
           region: r.id,
           label: c.display_name,
         }))
       })
       .flat()
-      .sort((a, b) => (a?.label ?? "").localeCompare(b?.label ?? ""))
+      .sort((a: any, b: any) => (a?.label ?? "").localeCompare(b?.label ?? ""))
   }, [regions])
 
   useEffect(() => {

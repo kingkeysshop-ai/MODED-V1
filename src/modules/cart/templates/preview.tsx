@@ -24,8 +24,8 @@ const ItemsPreviewTemplate = ({ cart }: ItemsTemplateProps) => {
     >
       {items
         ? items
-            .sort((a, b) => ((a.created_at ?? "") > (b.created_at ?? "") ? -1 : 1))
-            .map((item) => (
+            .sort((a: any, b: any) => ((a.created_at ?? "") > (b.created_at ?? "") ? -1 : 1))
+            .map((item: any) => (
               <Item
                 key={item.id}
                 item={item}
@@ -33,7 +33,7 @@ const ItemsPreviewTemplate = ({ cart }: ItemsTemplateProps) => {
                 currencyCode={cart.currency_code}
               />
             ))
-        : repeat(5).map((i) => <SkeletonLineItem key={i} />)}
+        : repeat(5).map((i: any) => <SkeletonLineItem key={i} />)}
     </div>
   )
 }

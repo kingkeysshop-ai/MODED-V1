@@ -3,7 +3,7 @@ import { Metadata } from "next"
 import { listCartOptions, retrieveCart } from "@lib/data/cart"
 import { retrieveCustomer } from "@lib/data/customer"
 import { getBaseURL } from "@lib/util/env"
-import { StoreCartShippingOption } from "@medusajs/types"
+import { HttpTypes } from "@medusajs/types"
 import { ToastProvider } from "@lib/context/toast-context"
 import ToastContainer from "@modules/common/components/toast"
 import CartMismatchBanner from "@modules/layout/components/cart-mismatch-banner"
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 export default async function PageLayout(props: { children: React.ReactNode }) {
   const customer = await retrieveCustomer()
   const cart = await retrieveCart()
-  let shippingOptions: StoreCartShippingOption[] = []
+  let shippingOptions: HttpTypes.StoreCartShippingOption[] = []
 
   if (cart) {
     const { shipping_options } = await listCartOptions()

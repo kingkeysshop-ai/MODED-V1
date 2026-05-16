@@ -14,13 +14,13 @@ export const listProducts = async ({
   regionId,
 }: {
   pageParam?: number
-  queryParams?: HttpTypes.FindParams & HttpTypes.StoreProductListParams
+  queryParams?: any & any
   countryCode?: string
   regionId?: string
 }): Promise<{
   response: { products: HttpTypes.StoreProduct[]; count: number }
   nextPage: number | null
-  queryParams?: HttpTypes.FindParams & HttpTypes.StoreProductListParams
+  queryParams?: any & any
 }> => {
   if (!countryCode && !regionId) {
     throw new Error("Country code or region ID is required")
@@ -30,7 +30,7 @@ export const listProducts = async ({
   const _pageParam = Math.max(pageParam, 1)
   const offset = _pageParam === 1 ? 0 : (_pageParam - 1) * limit
 
-  let region: HttpTypes.StoreRegion | undefined | null
+  let region: any | undefined | null
 
   if (countryCode) {
     region = await getRegion(countryCode)
@@ -59,6 +59,10 @@ export const listProducts = async ({
 
   delete queryOptions.fields
 
+  const expand =
+    queryOptions.expand ??
+    "variants,variants.prices,variants.options,images,options"
+
   return sdk.client
     .fetch<{ products: HttpTypes.StoreProduct[]; count: number }>(
       `/store/products`,
@@ -68,6 +72,7 @@ export const listProducts = async ({
           limit,
           offset,
           region_id: region?.id,
+          expand,
           ...queryOptions,
         },
         headers,
@@ -100,13 +105,13 @@ export const listProductsWithSort = async ({
   countryCode,
 }: {
   page?: number
-  queryParams?: HttpTypes.FindParams & HttpTypes.StoreProductParams
+  queryParams?: any & any
   sortBy?: SortOptions
   countryCode: string
 }): Promise<{
   response: { products: HttpTypes.StoreProduct[]; count: number }
   nextPage: number | null
-  queryParams?: HttpTypes.FindParams & HttpTypes.StoreProductParams
+  queryParams?: any & any
 }> => {
   const limit = queryParams?.limit || 12
 

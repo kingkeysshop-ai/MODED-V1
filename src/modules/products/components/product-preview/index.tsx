@@ -12,7 +12,7 @@ export default async function ProductPreview({
 }: {
   product: HttpTypes.StoreProduct
   isFeatured?: boolean
-  region: HttpTypes.StoreRegion
+  region: any
 }) {
   const { cheapestPrice } = getProductPrice({ product })
 

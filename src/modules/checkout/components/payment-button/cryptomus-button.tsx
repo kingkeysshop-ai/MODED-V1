@@ -16,7 +16,7 @@ const CryptomusPaymentButton = ({ cart, notReady, "data-testid": dataTestId }: P
   const [error, setError] = useState<string | null>(null)
 
   const session = cart.payment_collection?.payment_sessions?.find(
-    (s) => s.status === "pending"
+    (s: any) => s.status === "pending"
   )
 
   const handlePayment = async () => {

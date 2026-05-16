@@ -3,7 +3,7 @@ import { Container } from "@medusajs/ui"
 import Image from "next/image"
 
 type ImageGalleryProps = {
-  images: HttpTypes.StoreProductImage[]
+  images: any[]
 }
 
 const ImageGallery = ({ images }: ImageGalleryProps) => {

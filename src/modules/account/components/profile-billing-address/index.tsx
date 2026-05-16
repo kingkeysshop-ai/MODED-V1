@@ -9,7 +9,7 @@ import { addCustomerAddress, updateCustomerAddress } from "@lib/data/customer"
 
 type MyInformationProps = {
   customer: HttpTypes.StoreCustomer
-  regions: HttpTypes.StoreRegion[]
+  regions: any[]
 }
 
 const ProfileBillingAddress: React.FC<MyInformationProps> = ({ customer, regions }) => {
@@ -17,7 +17,7 @@ const ProfileBillingAddress: React.FC<MyInformationProps> = ({ customer, regions
     return (
       regions
         ?.map((region) =>
-          region.countries?.map((country) => ({
+          region.countries?.map((country: any) => ({
             value: country.iso_2,
             label: country.display_name,
           }))
@@ -28,7 +28,7 @@ const ProfileBillingAddress: React.FC<MyInformationProps> = ({ customer, regions
 
   const [successState, setSuccessState] = React.useState(false)
 
-  const billingAddress = customer.addresses?.find((addr) => addr.is_default_billing)
+  const billingAddress = customer.addresses?.find((addr: any) => addr.is_default_billing)
 
   const initialState: Record<string, any> = {
     isDefaultBilling: true,

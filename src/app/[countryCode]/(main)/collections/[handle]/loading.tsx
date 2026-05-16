@@ -14,7 +14,7 @@ export default function Loading() {
       <div className="flex flex-col small:flex-row small:items-start py-8 content-container gap-6">
         <div className="small:min-w-[220px] bg-gray-900 border border-gray-700 rounded-xl p-4 animate-pulse">
           <div className="w-20 h-4 bg-gray-800 rounded mb-4" />
-          {[1, 2, 3, 4].map((i) => (
+          {[1, 2, 3, 4].map((i: any) => (
             <div key={i} className="w-full h-8 bg-gray-800 rounded-lg mb-2" />
           ))}
         </div>

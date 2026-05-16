@@ -50,7 +50,7 @@ export default async function Footer() {
                     Todos los productos
                   </LocalizedClientLink>
                 </li>
-                {productCategories?.slice(0, 4).map((c) => !c.parent_category && (
+                {productCategories?.slice(0, 4).map((c: any) => !c.parent_category && (
                   <li key={c.id}>
                     <LocalizedClientLink
                       href={`/categories/${c.handle}`}
@@ -70,7 +70,7 @@ export default async function Footer() {
                   📦 Colecciones
                 </span>
                 <ul className="flex flex-col gap-2">
-                  {collections.slice(0, 5).map((c) => (
+                  {collections.slice(0, 5).map((c: any) => (
                     <li key={c.id}>
                       <LocalizedClientLink
                         href={`/collections/${c.handle}`}
@@ -95,7 +95,7 @@ export default async function Footer() {
                   { label: "Mis Pedidos", href: "/account/orders" },
                   { label: "Perfil", href: "/account/profile" },
                   { label: "Carrito", href: "/cart" },
-                ].map((item) => (
+                ].map((item: any) => (
                   <li key={item.href}>
                     <LocalizedClientLink
                       href={item.href}

@@ -21,7 +21,7 @@ type ShippingProps = {
   availableShippingMethods: HttpTypes.StoreCartShippingOption[] | null
 }
 
-function formatAddress(address: HttpTypes.StoreCartAddress) {
+function formatAddress(address: any) {
   if (!address) return ""
   let ret = ""
   if (address.address_1) ret += ` ${address.address_1}`
@@ -91,7 +91,7 @@ const Shipping: React.FC<ShippingProps> = ({ cart, availableShippingMethods }) =
     setIsLoading(true)
     setShippingMethodId((prev) => { currentId = prev; return id })
     await setShippingMethod({ cartId: cart.id, shippingMethodId: id })
-      .catch((err) => { setShippingMethodId(currentId); setError(err.message) })
+      .catch((err: any) => { setShippingMethodId(currentId); setError(err.message) })
       .finally(() => setIsLoading(false))
   }
 
@@ -149,7 +149,7 @@ const Shipping: React.FC<ShippingProps> = ({ cart, availableShippingMethods }) =
                   </RadioGroup>
                 )}
                 <RadioGroup value={shippingMethodId} onChange={(v) => { if (v) handleSetShippingMethod(v, "shipping") }}>
-                  {_shippingMethods?.map((option) => {
+                  {_shippingMethods?.map((option: any) => {
                     const isDisabled = option.price_type === "calculated" && !isLoadingPrices && typeof calculatedPricesMap[option.id] !== "number"
                     return (
                       <Radio
@@ -192,7 +192,7 @@ const Shipping: React.FC<ShippingProps> = ({ cart, availableShippingMethods }) =
               <div data-testid="delivery-options-container">
                 <div className="pb-8">
                   <RadioGroup value={shippingMethodId} onChange={(v) => { if (v) handleSetShippingMethod(v, "pickup") }}>
-                    {_pickupMethods?.map((option) => (
+                    {_pickupMethods?.map((option: any) => (
                       <Radio
                         key={option.id}
                         value={option.id}

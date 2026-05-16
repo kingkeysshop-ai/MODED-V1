@@ -8,7 +8,7 @@ import { HttpTypes } from "@medusajs/types"
 const CountrySelect = forwardRef<
   HTMLSelectElement,
   NativeSelectProps & {
-    region?: HttpTypes.StoreRegion
+    region?: any
   }
 >(({ placeholder = "Country", region, defaultValue, ...props }, ref) => {
   const innerRef = useRef<HTMLSelectElement>(null)
@@ -23,7 +23,7 @@ const CountrySelect = forwardRef<
       return []
     }
 
-    return region.countries?.map((country) => ({
+    return region.countries?.map((country: any) => ({
       value: country.iso_2,
       label: country.display_name,
     }))

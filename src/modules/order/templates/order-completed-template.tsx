@@ -31,7 +31,7 @@ export default async function OrderCompletedTemplate({ order }: OrderCompletedTe
               { icon: "⚡", text: "Entrega Inmediata" },
               { icon: "🔒", text: "100% Seguro" },
               { icon: "✅", text: "Original Garantizado" },
-            ].map((b) => (
+            ].map((b: any) => (
               <span key={b.text} className="px-3 py-1 bg-yellow-400/10 border border-yellow-400/40 text-yellow-400 text-xs rounded-full font-bold">
                 {b.icon} {b.text}
               </span>

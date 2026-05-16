@@ -13,16 +13,7 @@ export type Locale = {
  * Returns null if the endpoint returns 404 (locales not configured).
  */
 export const listLocales = async (): Promise<Locale[] | null> => {
-  const next = {
-    ...(await getCacheOptions("locales")),
-  }
-
-  return sdk.client
-    .fetch<{ locales: Locale[] }>(`/store/locales`, {
-      method: "GET",
-      next,
-      cache: "force-cache",
-    })
-    .then(({ locales }) => locales)
-    .catch(() => null)
+  // Medusa v1 storefront does not support /store/locales.
+  // Return an empty list so the layout still renders safely.
+  return []
 }

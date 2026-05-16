@@ -13,11 +13,11 @@ const Items = ({ order }: ItemsProps) => {
     <div className="flex flex-col" data-testid="products-table">
       {items?.length
         ? items
-            .sort((a, b) => ((a.created_at ?? "") > (b.created_at ?? "") ? -1 : 1))
-            .map((item) => (
+            .sort((a: any, b: any) => ((a.created_at ?? "") > (b.created_at ?? "") ? -1 : 1))
+            .map((item: any) => (
               <Item key={item.id} item={item} currencyCode={order.currency_code} />
             ))
-        : repeat(5).map((i) => <SkeletonLineItem key={i} />)}
+        : repeat(5).map((i: any) => <SkeletonLineItem key={i} />)}
     </div>
   )
 }

@@ -1,29 +1,50 @@
-import { HttpTypes } from "@medusajs/types"
+// src/lib/util/get-product-price.ts
 import { getPercentageDiff } from "./get-percentage-diff"
 import { convertToLocale } from "./money"
 
-export const getPricesForVariant = (variant: any) => {
-  if (!variant?.calculated_price?.calculated_amount) {
+export function getVariantPrice(variant: any, regionId?: string) {
+  if (!variant?.prices?.length) {
     return null
   }
 
+  const price =
+    variant.prices.find((p: any) => p.region_id === regionId) ||
+    variant.prices
+
+  if (!price) {
+    return null
+  }
+
+  return price
+}
+
+export const getPricesForVariant = (variant: any, regionId?: string) => {
+  const price = getVariantPrice(variant, regionId)
+
+  if (!price) {
+    return null
+  }
+
+  const amount = price.amount ?? 0
+  const currency_code = price.currency_code ?? "USD"
+
+  const originalAmount =
+    typeof price.original_amount === "number" ? price.original_amount : amount
+
   return {
-    calculated_price_number: variant.calculated_price.calculated_amount,
+    calculated_price_number: amount,
     calculated_price: convertToLocale({
-      amount: variant.calculated_price.calculated_amount,
-      currency_code: variant.calculated_price.currency_code,
+      amount,
+      currency_code,
     }),
-    original_price_number: variant.calculated_price.original_amount,
+    original_price_number: originalAmount,
     original_price: convertToLocale({
-      amount: variant.calculated_price.original_amount,
-      currency_code: variant.calculated_price.currency_code,
+      amount: originalAmount,
+      currency_code,
     }),
-    currency_code: variant.calculated_price.currency_code,
-    price_type: variant.calculated_price.calculated_price.price_list_type,
-    percentage_diff: getPercentageDiff(
-      variant.calculated_price.original_amount,
-      variant.calculated_price.calculated_amount
-    ),
+    currency_code,
+    price_type: amount < originalAmount ? "sale" : "regular",
+    percentage_diff: getPercentageDiff(originalAmount, amount),
   }
 }
 
@@ -31,7 +52,7 @@ export function getProductPrice({
   product,
   variantId,
 }: {
-  product: HttpTypes.StoreProduct
+  product: any
   variantId?: string
 }) {
   if (!product || !product.id) {
@@ -44,13 +65,12 @@ export function getProductPrice({
     }
 
     const cheapestVariant: any = product.variants
-      .filter((v: any) => !!v.calculated_price)
+      .filter((v: any) => getVariantPrice(v, undefined))
       .sort((a: any, b: any) => {
-        return (
-          a.calculated_price.calculated_amount -
-          b.calculated_price.calculated_amount
-        )
-      })[0]
+        const aPrice = getVariantPrice(a, undefined)?.amount ?? 0
+        const bPrice = getVariantPrice(b, undefined)?.amount ?? 0
+        return aPrice - bPrice
+      })
 
     return getPricesForVariant(cheapestVariant)
   }
@@ -61,7 +81,7 @@ export function getProductPrice({
     }
 
     const variant: any = product.variants?.find(
-      (v) => v.id === variantId || v.sku === variantId
+      (v: any) => v.id === variantId || v.sku === variantId
     )
 
     if (!variant) {

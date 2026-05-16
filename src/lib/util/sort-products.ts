@@ -1,8 +1,13 @@
-import { HttpTypes } from "@medusajs/types"
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
 
-interface MinPricedProduct extends HttpTypes.StoreProduct {
+interface MinPricedProduct {
   _minPrice?: number
+  variants?: Array<{
+    prices?: Array<{ amount?: number }>
+    [key: string]: any
+  }>
+  created_at?: string | Date
+  [key: string]: any
 }
 
 /**
@@ -12,9 +17,9 @@ interface MinPricedProduct extends HttpTypes.StoreProduct {
  * @returns products sorted by price
  */
 export function sortProducts(
-  products: HttpTypes.StoreProduct[],
+  products: any[],
   sortBy: SortOptions
-): HttpTypes.StoreProduct[] {
+): any[] {
   let sortedProducts = products as MinPricedProduct[]
 
   if (["price_asc", "price_desc"].includes(sortBy)) {
@@ -23,7 +28,7 @@ export function sortProducts(
       if (product.variants && product.variants.length > 0) {
         product._minPrice = Math.min(
           ...product.variants.map(
-            (variant) => variant?.calculated_price?.calculated_amount || 0
+            (variant) => variant?.prices?.[0]?.amount || 0
           )
         )
       } else {
@@ -32,14 +37,14 @@ export function sortProducts(
     })
 
     // Sort products based on the precomputed minimum prices
-    sortedProducts.sort((a, b) => {
+    sortedProducts.sort((a: any, b: any) => {
       const diff = a._minPrice! - b._minPrice!
       return sortBy === "price_asc" ? diff : -diff
     })
   }
 
   if (sortBy === "created_at") {
-    sortedProducts.sort((a, b) => {
+    sortedProducts.sort((a: any, b: any) => {
       return (
         new Date(b.created_at!).getTime() - new Date(a.created_at!).getTime()
       )

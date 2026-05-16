@@ -79,7 +79,7 @@ const StripePaymentButton = ({
 
   const onPaymentCompleted = async () => {
     await placeOrder()
-      .catch((err) => setErrorMessage(err.message))
+      .catch((err: any) => setErrorMessage(err.message))
       .finally(() => setSubmitting(false))
   }
 
@@ -88,7 +88,7 @@ const StripePaymentButton = ({
   const card = elements?.getElement("card")
 
   const session = cart.payment_collection?.payment_sessions?.find(
-    (s) => s.status === "pending"
+    (s: any) => s.status === "pending"
   )
 
   const disabled = !stripe || !elements
@@ -167,7 +167,7 @@ const ManualTestPaymentButton = ({
 
   const onPaymentCompleted = async () => {
     await placeOrder()
-      .catch((err) => setErrorMessage(err.message))
+      .catch((err: any) => setErrorMessage(err.message))
       .finally(() => setSubmitting(false))
   }
 

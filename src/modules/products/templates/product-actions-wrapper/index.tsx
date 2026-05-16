@@ -10,7 +10,7 @@ export default async function ProductActionsWrapper({
   region,
 }: {
   id: string
-  region: HttpTypes.StoreRegion
+  region: any
 }) {
   const product = await listProducts({
     queryParams: { id: [id] },

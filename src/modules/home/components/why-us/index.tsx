@@ -135,7 +135,7 @@ const WhyUs = () => {
             { icon: "🌟", text: "4.9/5 valoración media" },
             { icon: "📦", text: "+10,000 licencias entregadas" },
             { icon: "🇨🇴", text: "Operamos desde Colombia" },
-          ].map((b) => (
+          ].map((b: any) => (
             <div key={b.text} className="flex items-center gap-2 text-sm text-gray-500">
               <span>{b.icon}</span>
               <span>{b.text}</span>

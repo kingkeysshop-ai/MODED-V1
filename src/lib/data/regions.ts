@@ -11,7 +11,7 @@ export const listRegions = async () => {
   }
 
   return sdk.client
-    .fetch<{ regions: HttpTypes.StoreRegion[] }>(`/store/regions`, {
+    .fetch<{ regions: any[] }>(`/store/regions`, {
       method: "GET",
       next,
       cache: "force-cache",
@@ -26,7 +26,7 @@ export const retrieveRegion = async (id: string) => {
   }
 
   return sdk.client
-    .fetch<{ region: HttpTypes.StoreRegion }>(`/store/regions/${id}`, {
+    .fetch<{ region: any }>(`/store/regions/${id}`, {
       method: "GET",
       next,
       cache: "force-cache",
@@ -35,7 +35,7 @@ export const retrieveRegion = async (id: string) => {
     .catch(medusaError)
 }
 
-const regionMap = new Map<string, HttpTypes.StoreRegion>()
+const regionMap = new Map<string, any>()
 
 export const getRegion = async (countryCode: string) => {
   try {
@@ -49,8 +49,8 @@ export const getRegion = async (countryCode: string) => {
       return null
     }
 
-    regions.forEach((region) => {
-      region.countries?.forEach((c) => {
+    regions.forEach((region: any) => {
+      region.countries?.forEach((c: any) => {
         if (c?.iso_2) {
           regionMap.set(c.iso_2.toLowerCase(), region)
         }

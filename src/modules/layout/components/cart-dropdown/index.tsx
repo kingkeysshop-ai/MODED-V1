@@ -12,13 +12,13 @@ import { usePathname } from "next/navigation"
 import { Fragment, useEffect, useRef, useState } from "react"
 
 const CartDropdown = ({ cart: cartState }: { cart?: HttpTypes.StoreCart | null }) => {
-  const [activeTimer, setActiveTimer] = useState<NodeJS.Timer | undefined>(undefined)
+  const [activeTimer, setActiveTimer] = useState<ReturnType<typeof setTimeout> | undefined>(undefined)
   const [cartDropdownOpen, setCartDropdownOpen] = useState(false)
 
   const open = () => setCartDropdownOpen(true)
   const close = () => setCartDropdownOpen(false)
 
-  const totalItems = cartState?.items?.reduce((acc, item) => acc + item.quantity, 0) || 0
+  const totalItems = cartState?.items?.reduce((acc: number, item: any) => acc + item.quantity, 0) || 0
   const subtotal = cartState?.subtotal ?? 0
   const itemRef = useRef<number>(totalItems || 0)
 
@@ -94,8 +94,8 @@ const CartDropdown = ({ cart: cartState }: { cart?: HttpTypes.StoreCart | null }
               <>
                 <div className="overflow-y-auto max-h-[320px] flex flex-col divide-y divide-gray-700/50 no-scrollbar">
                   {cartState.items
-                    .sort((a, b) => ((a.created_at ?? "") > (b.created_at ?? "") ? -1 : 1))
-                    .map((item) => (
+                    .sort((a: any, b: any) => ((a.created_at ?? "") > (b.created_at ?? "") ? -1 : 1))
+                    .map((item: any) => (
                       <div className="flex gap-3 p-4" key={item.id} data-testid="cart-item">
                         <LocalizedClientLink href={`/products/${item.product_handle}`} className="w-14 shrink-0">
                           <div className="rounded-lg overflow-hidden border border-gray-700">

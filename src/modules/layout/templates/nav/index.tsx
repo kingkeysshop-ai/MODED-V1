@@ -2,7 +2,7 @@ import { Suspense } from "react"
 import { listRegions } from "@lib/data/regions"
 import { listLocales } from "@lib/data/locales"
 import { getLocale } from "@lib/data/locale-actions"
-import { StoreRegion } from "@medusajs/types"
+import { HttpTypes } from "@medusajs/types"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import CartButton from "@modules/layout/components/cart-button"
 import MobileBottomNav from "@modules/layout/components/mobile-bottom-nav"
@@ -11,7 +11,7 @@ import SideMenu from "@modules/layout/components/side-menu"
 
 export default async function Nav() {
   const [regions, locales, currentLocale] = await Promise.all([
-    listRegions().then((regions: StoreRegion[]) => regions),
+    listRegions().then((regions: any[]) => regions),
     listLocales(),
     getLocale(),
   ])
