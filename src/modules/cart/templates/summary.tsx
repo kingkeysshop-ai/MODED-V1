@@ -24,6 +24,17 @@ function getCheckoutStep(cart: HttpTypes.StoreCart) {
 const Summary = ({ cart }: SummaryProps) => {
   const step = getCheckoutStep(cart)
 
+  // Extraer datos para CartTotals con currency_code
+  const cartTotals = {
+    total: cart.total,
+    subtotal: cart.subtotal,
+    tax_total: cart.tax_total,
+    currency_code: cart.region?.currency_code || "USD",
+    item_subtotal: cart.item_subtotal,
+    shipping_subtotal: cart.shipping_subtotal,
+    discount_subtotal: cart.discount_subtotal,
+  }
+
   return (
     <div className="flex flex-col gap-y-5">
 
@@ -38,7 +49,7 @@ const Summary = ({ cart }: SummaryProps) => {
 
       {/* Totales */}
       <div className="bg-gray-800/50 rounded-lg p-4">
-        <CartTotals totals={cart} />
+        <CartTotals totals={cartTotals} />
       </div>
 
       {/* Boton checkout */}

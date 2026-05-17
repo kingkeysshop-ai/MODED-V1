@@ -70,28 +70,24 @@ export async function signup(_currentState: unknown, formData: FormData) {
   }
 
   try {
-    // ✅ FIX SDK v2: register(provider, actor_type, body)
-    const token = await sdk.auth.register("emailpass", "customer", {
-      ...customerForm,
+    // ✅ CORRECCIÓN PARA SDK V1: Usar sdk.customers.create en lugar de sdk.store.customer
+    // El recurso de clientes en Medusa V1 se crea con sdk.customers.create
+    const customerResponse = await sdk.customers.create({
+      email: customerForm.email,
+      first_name: customerForm.first_name,
+      last_name: customerForm.last_name,
+      phone: customerForm.phone,
       password,
     })
 
-    await setAuthToken(token as unknown as string)
+    // Opcional: Si el backend requiere confirmación de email,
+    // el usuario no estará logueado automáticamente.
+    // Aquí podrías lanzar un error personalizado o manejar la respuesta.
 
-    const headers = {
-      authorization: `Bearer ${token}`,
-    }
-
-    const { customer: createdCustomer } = await sdk.customers.retrieve(headers)
-
-    const customerCacheTag = await getCacheTag("customers")
-    revalidateTag(customerCacheTag)
-
-    await transferCart()
-
-    return createdCustomer
+    return null
   } catch (error: any) {
-    return error.toString()
+    console.error("Error en registro de cliente (SDK V1):", error.response?.data || error.message)
+    throw error
   }
 }
 
@@ -102,7 +98,8 @@ export async function login(_currentState: unknown, formData: FormData) {
 
   try {
     // ✅ FIX SDK v2: login(provider, actor_type, body)
-    await sdk.auth
+    // El método se inyecta en runtime desde la adaptación V1, así que forzamos el tipo aquí.
+    await (sdk.auth as any)
       .login("emailpass", "customer", { email, password })
       .then(async (token: any) => {
         await setAuthToken(token as unknown as string)

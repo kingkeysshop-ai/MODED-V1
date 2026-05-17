@@ -20,20 +20,26 @@ const TransferActions = ({ id, token }: { id: string; token: string }) => {
     setStatus({ accept: "pending", decline: null })
     setErrorMessage(null)
 
-    const { success, error } = await acceptTransferRequest(id, token)
-
-    if (error) setErrorMessage(error)
-    setStatus({ accept: success ? "success" : "error", decline: null })
+    try {
+      await acceptTransferRequest(id, token)
+      setStatus({ accept: "success", decline: null })
+    } catch (err: any) {
+      setErrorMessage(err.message || "Failed to accept transfer")
+      setStatus({ accept: "error", decline: null })
+    }
   }
 
   const declineTransfer = async () => {
     setStatus({ accept: null, decline: "pending" })
     setErrorMessage(null)
 
-    const { success, error } = await declineTransferRequest(id, token)
-
-    if (error) setErrorMessage(error)
-    setStatus({ accept: null, decline: success ? "success" : "error" })
+    try {
+      await declineTransferRequest(id, token)
+      setStatus({ accept: null, decline: "success" })
+    } catch (err: any) {
+      setErrorMessage(err.message || "Failed to decline transfer")
+      setStatus({ accept: null, decline: "error" })
+    }
   }
 
   return (

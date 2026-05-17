@@ -3,6 +3,17 @@ import DiscountCode from "@modules/checkout/components/discount-code"
 import CartTotals from "@modules/common/components/cart-totals"
 
 const CheckoutSummary = ({ cart }: { cart: any }) => {
+  // Extraer datos para CartTotals con currency_code
+  const cartTotals = {
+    total: cart.total,
+    subtotal: cart.subtotal,
+    tax_total: cart.tax_total,
+    currency_code: cart.region?.currency_code || "USD",
+    item_subtotal: cart.item_subtotal,
+    shipping_subtotal: cart.shipping_subtotal,
+    discount_subtotal: cart.discount_subtotal,
+  }
+
   return (
     <div className="sticky top-0 flex flex-col-reverse small:flex-col gap-y-6 py-8 small:py-0">
       <div className="w-full bg-gray-900 border border-yellow-400/20 rounded-xl p-6 flex flex-col gap-y-5">
@@ -21,7 +32,7 @@ const CheckoutSummary = ({ cart }: { cart: any }) => {
 
         {/* Totales */}
         <div className="bg-gray-800 border border-gray-700 rounded-lg p-4">
-          <CartTotals totals={cart} />
+          <CartTotals totals={cartTotals} />
         </div>
 
         {/* Descuento */}

@@ -8,22 +8,25 @@ export const listCategories = async (query?: Record<string, any>) => {
   }
 
   const limit = query?.limit || 100
-  const queryOptions: Record<string, any> = {
+  const queryOptions = {
     limit,
     ...query,
-  }
+  } as Record<string, any>
 
-  // En SDK v2 se usa "fields" con prefijo "+" para relaciones
-  // NO se elimina fields, se construye con los valores por defecto si no viene
-  if (!queryOptions.fields) {
-    queryOptions.fields = "+category_children,+parent_category"
-  }
+  delete queryOptions.fields
+
+  const expand =
+    queryOptions.expand ??
+    "category_children,products,parent_category"
 
   return sdk.client
     .fetch<{ product_categories: HttpTypes.StoreProductCategory[] }>(
       "/store/product-categories",
       {
-        query: queryOptions,
+        query: {
+          ...queryOptions,
+          expand,
+        },
         next,
         cache: "force-cache",
       }
@@ -44,11 +47,10 @@ export const getCategoryByHandle = async (categoryHandle: string[]) => {
       {
         query: {
           handle,
-          fields: "+category_children,+parent_category",
         },
         next,
         cache: "force-cache",
       }
     )
-    .then(({ product_categories }) => product_categories)
+    .then(({ product_categories }) => product_categories[0])
 }

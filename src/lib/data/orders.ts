@@ -72,17 +72,33 @@ export const listOrders = async (
 
 // ─── Crear solicitud de transferencia de orden ────────────────────────────────
 export const createTransferRequest = async (
-  orderId: string
-): Promise<{ order: HttpTypes.StoreOrder }> => {
+  _currentState: {
+    success: boolean
+    error: string | null
+    order: HttpTypes.StoreOrder | null
+  },
+  formData: FormData
+): Promise<{ success: true; error: null; order: HttpTypes.StoreOrder } | { success: false; error: string; order: null }> => {
+  const orderId = formData.get("order_id") as string
   const headers = await getAuthHeaders()
 
-  return sdk.client.fetch<{ order: HttpTypes.StoreOrder }>(
-    `/store/orders/${orderId}/transfer`,
-    {
-      method: "POST",
-      headers,
+  try {
+    const { order } = await sdk.client.fetch<{ order: HttpTypes.StoreOrder }>(
+      `/store/orders/${orderId}/transfer`,
+      {
+        method: "POST",
+        headers,
+      }
+    )
+
+    return { success: true, error: null, order }
+  } catch (error: any) {
+    return {
+      success: false,
+      error: error.response?.data?.message || error.message || "Transfer request failed",
+      order: null,
     }
-  )
+  }
 }
 
 // ─── Aceptar solicitud de transferencia ──────────────────────────────────────

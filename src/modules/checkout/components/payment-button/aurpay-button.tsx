@@ -2,6 +2,7 @@
 
 import { placeOrder } from "@lib/data/cart"
 import { HttpTypes } from "@medusajs/types"
+import Image from "next/image"
 import React, { useState } from "react"
 import ErrorMessage from "../error-message"
 
@@ -21,7 +22,7 @@ const AurpayPaymentButton: React.FC<AurpayPaymentButtonProps> = ({
 
   // Obtener la sesión de pago de Aurpay (generada por el backend con HMAC-SHA256)
   const paymentSession = cart.payment_collection?.payment_sessions?.find(
-    (s) => s.provider_id?.startsWith("pp_aurpay") && s.status === "pending"
+    (s: any) => s.provider_id?.startsWith("pp_aurpay") && s.status === "pending"
   )
   const payUrl = paymentSession?.data?.pay_url as string | undefined
 
@@ -80,8 +81,9 @@ const AurpayPaymentButton: React.FC<AurpayPaymentButtonProps> = ({
         {submitting ? (
           <span className="inline-block w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
         ) : (
-          <img
-            style={{ width: "24px", height: "24px" }}
+          <Image
+            width={24}
+            height={24}
             src="https://aurpay.net/wp-content/uploads/2022/06/favicon-logo.png"
             alt="logo"
           />

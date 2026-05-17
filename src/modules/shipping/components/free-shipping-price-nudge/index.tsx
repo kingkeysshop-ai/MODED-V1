@@ -87,18 +87,17 @@ export default function ShippingPriceNudge({
 
   // Check if any shipping options have a conditional price based on item_total
   const freeShippingPrice = shippingOptions
-    .flatMap((shippingOption) => {
+    .flatMap((shippingOption: any) => {
       if (!shippingOption.prices?.length) {
         return []
       }
 
       return shippingOption.prices
-        .filter(
-          (price) =>
-            price.currency_code === cart.currency_code &&
-            (price.price_rules || []).some(
-              (priceRule) => priceRule.attribute === "item_total"
-            )
+        .filter((price: any) =>
+          price.currency_code === cart.currency_code &&
+          (price.price_rules || []).some(
+            (priceRule: any) => priceRule.attribute === "item_total"
+          )
         )
         .map((price: any) => ({
           ...price,

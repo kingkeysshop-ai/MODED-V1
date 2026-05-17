@@ -18,7 +18,7 @@ const CountrySelect = forwardRef<
     () => innerRef.current
   )
 
-  const countryOptions = useMemo(() => {
+  const countryOptions = useMemo<{ value: string; label: string }[]>(() => {
     if (!region) {
       return []
     }

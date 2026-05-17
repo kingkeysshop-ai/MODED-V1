@@ -12,7 +12,7 @@ export default function TransferRequestForm() {
 
   const [state, formAction] = useActionState(createTransferRequest, {
     success: false,
-    error: null,
+    error: "",
     order: null,
   })
 

@@ -1,4 +1,4 @@
-// src/lib/util/get-product-price.ts
+import { HttpTypes } from "@medusajs/types"
 import { getPercentageDiff } from "./get-percentage-diff"
 import { convertToLocale } from "./money"
 
@@ -9,7 +9,7 @@ export function getVariantPrice(variant: any, regionId?: string) {
 
   const price =
     variant.prices.find((p: any) => p.region_id === regionId) ||
-    variant.prices
+    variant.prices[0]
 
   if (!price) {
     return null
@@ -28,8 +28,7 @@ export const getPricesForVariant = (variant: any, regionId?: string) => {
   const amount = price.amount ?? 0
   const currency_code = price.currency_code ?? "USD"
 
-  const originalAmount =
-    typeof price.original_amount === "number" ? price.original_amount : amount
+  const originalAmount = typeof price.original_amount === "number" ? price.original_amount : amount
 
   return {
     calculated_price_number: amount,
@@ -52,7 +51,7 @@ export function getProductPrice({
   product,
   variantId,
 }: {
-  product: any
+  product: HttpTypes.StoreProduct
   variantId?: string
 }) {
   if (!product || !product.id) {
@@ -70,7 +69,7 @@ export function getProductPrice({
         const aPrice = getVariantPrice(a, undefined)?.amount ?? 0
         const bPrice = getVariantPrice(b, undefined)?.amount ?? 0
         return aPrice - bPrice
-      })
+      })[0]
 
     return getPricesForVariant(cheapestVariant)
   }

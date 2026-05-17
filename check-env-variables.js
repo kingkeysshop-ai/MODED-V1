@@ -6,11 +6,6 @@ const requiredEnvs = [
     description:
       "Learn how to create a publishable key: https://docs.medusajs.com/",
   },
-  {
-    key: "MEDUSA_BACKEND_URL",
-    description:
-      "Public/Private URL of your Medusa v1 backend, e.g. https://your-medusa.up.railway.app",
-  },
 ]
 
 const recommendedEnvs = [
@@ -25,6 +20,14 @@ function checkEnvVariables() {
   const missingRequired = requiredEnvs.filter(function (env) {
     return !process.env[env.key]
   })
+
+  if (!process.env.MEDUSA_BACKEND_URL && !process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL) {
+    missingRequired.push({
+      key: "MEDUSA_BACKEND_URL or NEXT_PUBLIC_MEDUSA_BACKEND_URL",
+      description:
+        "Public or private URL of your Medusa v1 backend, e.g. https://your-medusa.up.railway.app",
+    })
+  }
 
   const missingRecommended = recommendedEnvs.filter(function (env) {
     return !process.env[env.key]

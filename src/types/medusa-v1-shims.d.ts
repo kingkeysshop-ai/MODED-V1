@@ -19,6 +19,18 @@ declare module "@medusajs/types" {
       [key: string]: any
     }
 
+    interface StoreCartResponse {
+      cart: StoreCart
+    }
+
+    interface StoreUpdateCart {
+      [key: string]: any
+    }
+
+    interface StoreInitializePaymentSession {
+      [key: string]: any
+    }
+
     interface StoreCustomer {
       [key: string]: any
     }
@@ -40,6 +52,22 @@ declare module "@medusajs/types" {
     }
 
     interface StoreProductCategory {
+      [key: string]: any
+    }
+
+    interface StoreProductCategoryListResponse {
+      product_categories: StoreProductCategory[]
+    }
+
+    interface FindParams {
+      [key: string]: any
+    }
+
+    interface StoreProductListParams {
+      [key: string]: any
+    }
+
+    interface StoreProductParams {
       [key: string]: any
     }
   }
@@ -79,6 +107,10 @@ declare module "@medusajs/types" {
 declare module "@medusajs/medusa-js" {
   interface Client {
     fetch<T = any>(input: string, init?: any): Promise<T>
+  }
+
+  interface Medusa {
+    store: any
   }
 }
 

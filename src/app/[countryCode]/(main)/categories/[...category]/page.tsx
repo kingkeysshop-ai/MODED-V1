@@ -26,7 +26,13 @@ export async function generateStaticParams() {
     }
 
     const countryCodes = await listRegions().then((regions: any[]) =>
-      regions?.map((r) => r.countries?.map((c: any) => c.iso_2).flat())
+      regions
+        ?.flatMap((region: any) =>
+          region.countries?.
+            map((country: any) => country.iso_2)
+            .filter(Boolean) ?? []
+        )
+        .filter((code: any): code is string => typeof code === "string")
     )
 
     const categoryHandles = product_categories.map(
@@ -34,13 +40,13 @@ export async function generateStaticParams() {
     )
 
     const staticParams = countryCodes
-      ?.map((countryCode: string | undefined) =>
-        categoryHandles.map((handle: any) => ({
-          countryCode,
-          category: [handle],
-        }))
-      )
-      .flat()
+      ? countryCodes.flatMap((countryCode: string) =>
+          categoryHandles.map((handle: any) => ({
+            countryCode,
+            category: [handle],
+          }))
+        )
+      : []
 
     return staticParams
   } catch (error) {
@@ -52,20 +58,31 @@ export async function generateStaticParams() {
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const params = await props.params
   try {
-    const productCategory = await getCategoryByHandle(params.category)
+    // 1. Obtenemos la categoría por su handle
+    const category = await getCategoryByHandle(params.category)
 
-    const title = productCategory.name + " | Medusa Store"
+    // 2. Validación explícita para evitar errores de ejecución
+    if (!category) {
+      return {
+        title: "Category | Medusa Store",
+        description: "Category not found",
+      }
+    }
 
-    const description = productCategory.description ?? `${title} category.`
+    // 3. Construcción segura de metadatos
+    const title = `${category.name} | Medusa Store`
+    const description = category.description ?? `${title} category.`
 
     return {
-      title: `${title} | Medusa Store`,
+      title,
       description,
       alternates: {
-        canonical: `${params.category.join("/")}`,
+        // 5. Aseguramos que la canonical tenga la barra inicial para rutas correctas
+        canonical: `/${params.category.join("/")}`,
       },
     }
   } catch (error) {
+    // Manejo de errores global
     notFound()
   }
 }

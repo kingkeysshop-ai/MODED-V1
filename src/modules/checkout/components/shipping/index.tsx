@@ -78,7 +78,7 @@ const Shipping: React.FC<ShippingProps> = ({ cart, availableShippingMethods }) =
     if (_pickupMethods?.find((m) => m.id === shippingMethodId)) {
       setShowPickupOptions(PICKUP_OPTION_ON)
     }
-  }, [availableShippingMethods])
+  }, [availableShippingMethods, _pickupMethods, _shippingMethods, cart.id, shippingMethodId])
 
   const handleEdit = () => router.push(pathname + "?step=delivery", { scroll: false })
   const handleSubmit = () => router.push(pathname + "?step=payment", { scroll: false })

@@ -11,6 +11,17 @@ type OrderCompletedTemplateProps = {
 }
 
 export default async function OrderCompletedTemplate({ order }: OrderCompletedTemplateProps) {
+  // Extraer datos para CartTotals con currency_code
+  const orderTotals = {
+    total: order.total,
+    subtotal: order.subtotal,
+    tax_total: order.tax_total,
+    currency_code: order.currency_code || "USD",
+    item_subtotal: order.item_subtotal,
+    shipping_subtotal: order.shipping_subtotal,
+    discount_subtotal: order.discount_total,
+  }
+
   return (
     <div className="min-h-screen bg-gray-950 py-10">
       <div className="content-container max-w-3xl mx-auto flex flex-col gap-6">
@@ -62,7 +73,7 @@ export default async function OrderCompletedTemplate({ order }: OrderCompletedTe
               <div className="flex items-center gap-2 mb-4 pb-2 border-b border-gray-700">
                 <span className="text-yellow-400 font-black text-sm uppercase tracking-wider">Resumen del Costo</span>
               </div>
-              <CartTotals totals={order} />
+              <CartTotals totals={orderTotals} />
             </div>
 
             {/* Envio */}
